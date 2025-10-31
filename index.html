@@ -1,7 +1,438 @@
-<div>
-    <h1>Rance's first HTML</h1>
-    <p>
-        Inserted inside is text content
-    </p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芳芳来啦</title>
+    <style>
+/* 导入现代字体 */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
 
-</div>
+/* 页面基础样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #ffeef8 0%, #e8f5ff 25%, #fff0e6 50%, #f0fff0 75%, #fdf2ff 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 背景渐变动画 */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 弹窗容器样式 */
+#popup-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.popup-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* 基础弹窗样式 - 现代玻璃态设计 */
+.popup {
+    position: absolute;
+    min-width: 140px;
+    max-width: 200px;
+    padding: 18px 24px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        0 2px 8px rgba(255, 255, 255, 0.1) inset;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.15);
+    cursor: default;
+    user-select: none;
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.02s ease, transform 0.02s ease;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .popup {
+        min-width: 120px;
+        max-width: 170px;
+        padding: 14px 18px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .popup {
+        min-width: 100px;
+        max-width: 150px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}
+
+/* 淡入动画效果 */
+.popup-fade-in {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+    transition: opacity 0.02s ease, transform 0.02s ease;
+}
+
+/* 淡出动画效果 */
+.popup-fade-out {
+    opacity: 0 !important;
+    transform: scale(0.8) !important;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* 动画关键帧 */
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes popupFadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.8) translateY(-10px);
+    }
+}
+
+/* 动画类 */
+.popup-animate-in {
+    animation: popupFadeIn 0.02s ease forwards;
+}
+
+.popup-animate-out {
+    animation: popupFadeOut 0.3s ease forwards;
+}
+    </style>
+</head>
+<body>
+    <div id="popup-container"></div>
+    <script>
+// ==================== 可调参数配置（在这里修改） ====================
+
+// 弹窗数量（桌面端显示的弹窗总数，移动端会自动减少到60%）
+const POPUP_COUNT = 60;
+
+// 弹窗大小（像素）
+const POPUP_MIN_WIDTH = 140;      // 最小宽度
+const POPUP_MAX_WIDTH = 200;      // 最大宽度
+const POPUP_PADDING = 16;         // 内边距
+const POPUP_FONT_SIZE = 16;       // 字体大小
+
+// 动画速度（毫秒）
+const FADE_IN_DURATION = 800;      // 淡入速度（数字越小越快）
+const DISPLAY_DURATION = 1600;    // 显示时长
+const FADE_OUT_DURATION = 200;    // 淡出速度（数字越小越快）
+
+// 弹窗出现间隔（毫秒）
+const BASE_DELAY = 220;           // 每个弹窗之间的基础间隔
+const RANDOM_DELAY = 2000;        // 额外的随机延迟（0到这个数之间）
+
+// 从中间向外扩散效果
+const CENTER_START_COUNT = 38;    // 从中间开始扩散的弹窗数量
+const CENTER_SPREAD_RADIUS = 50;  // 扩散的最大半径（百分比，45表示从中心向外最多扩散45%）
+
+// 回归中间效果
+const CENTER_END_COUNT = 20;      // 最后多少个弹窗回归到中间
+const CENTER_RETURN_RADIUS = 35;  // 回归时的最大半径（百分比，数值越小越靠近中心）
+
+// 弹窗集中度设置（让大部分弹窗集中在画面中间）
+const CENTER_AREA_WIDTH = 65;     // 中心区域宽度（百分比，如70表示画面中间70%的宽度）
+const CENTER_AREA_HEIGHT = 65;    // 中心区域高度（百分比，如70表示画面中间70%的高度）
+const CENTER_PROBABILITY = 0.85;  // 弹窗出现在中心区域的概率（0.75表示75%的弹窗在中心）
+
+// 自动刷新间隔（毫秒，设为0则不自动刷新）
+const AUTO_REFRESH_INTERVAL = 30000;
+
+// 温馨话语（可以随意添加或修改）
+const MESSAGES = [
+    '多喝水哦', '保持微笑', '每天都要元气满满', '记得吃水果',
+    '保持好心情', '好好爱自己', '梦想成真', '期待下一次见面',
+    '顺顺利利', '早点休息别熬夜', '今天过得开心嘛',
+    '天冷了，多穿衣服', '爱你呀','加油加油','冲冲冲','要永远和小猪一起','梁久梁久长长久久','宝宝琴要天天开心','要好好吃饭呀'
+];
+
+// ==================== 最后一个弹窗独立配置 ====================
+// 最后一个弹窗会固定在屏幕正中间，并且可以独立设置样式和内容
+
+const LAST_POPUP_INITIAL_MESSAGE = '来啦来啦';  // 最后一个弹窗的初始内容
+const LAST_POPUP_FINAL_MESSAGE = '永远爱你呀 ❤️';  // 最后一个弹窗的最终内容
+const LAST_POPUP_CHANGE_DELAY = 3600;           // 内容变化的延迟时间（毫秒，从出现开始计算）
+const LAST_POPUP_FADE_IN = 800;                 // 最后一个弹窗淡入速度（毫秒）
+const LAST_POPUP_DISPLAY = 4600;                // 最后一个弹窗显示时长（毫秒）
+const LAST_POPUP_FADE_OUT = 800;                // 最后一个弹窗淡出速度（毫秒）
+
+// ==================== 核心代码（一般不需要修改） ====================
+
+// 生成浅色系颜色（稍微深一点，更有质感）
+function generatePastelColor() {
+    const hue = Math.floor(Math.random() * 360);
+    const saturation = Math.floor(Math.random() * 35) + 50;  // 50-85%，比之前更饱和
+    const lightness = Math.floor(Math.random() * 15) + 70;   // 70-85%，比之前稍深
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+// 生成随机位置（支持从中间向外扩散 + 中心区域集中 + 回归中间 + 最后一个固定中间）
+function generatePosition(index, totalCount) {
+    // 最后一个弹窗固定在屏幕正中间
+    if (index === totalCount - 1) {
+        return { x: 50, y: 50 };
+    }
+    
+    // 前N个弹窗从中间向外扩散
+    if (index < CENTER_START_COUNT) {
+        const progress = index / CENTER_START_COUNT; // 0到1的进度
+        const radius = progress * CENTER_SPREAD_RADIUS;
+        
+        // 随机角度
+        const angle = Math.random() * Math.PI * 2;
+        
+        // 计算位置（以屏幕中心为原点）
+        const x = 50 + Math.cos(angle) * radius;
+        const y = 50 + Math.sin(angle) * radius;
+        
+        return { x, y };
+    }
+    
+    // 最后N个弹窗（除了最后一个特殊弹窗）回归到中间
+    const endThreshold = totalCount - 1 - CENTER_END_COUNT; // 减1是因为最后一个是特殊弹窗
+    if (index >= endThreshold && index < totalCount - 1) {
+        // 计算回归进度（从外向内，1到0）
+        const remainingCount = totalCount - 1 - index;
+        const progress = remainingCount / CENTER_END_COUNT; // 1到0的进度
+        const radius = progress * CENTER_RETURN_RADIUS;
+        
+        // 随机角度
+        const angle = Math.random() * Math.PI * 2;
+        
+        // 计算位置（以屏幕中心为原点）
+        const x = 50 + Math.cos(angle) * radius;
+        const y = 50 + Math.sin(angle) * radius;
+        
+        return { x, y };
+    }
+    
+    // 中间的弹窗：根据概率决定是在中心区域还是全屏随机
+    const inCenterArea = Math.random() < CENTER_PROBABILITY;
+    
+    if (inCenterArea) {
+        // 在中心区域内随机分布
+        const centerMarginX = (100 - CENTER_AREA_WIDTH) / 2;
+        const centerMarginY = (100 - CENTER_AREA_HEIGHT) / 2;
+        
+        return {
+            x: centerMarginX + Math.random() * CENTER_AREA_WIDTH,
+            y: centerMarginY + Math.random() * CENTER_AREA_HEIGHT
+        };
+    } else {
+        // 全屏随机分布
+        return {
+            x: Math.random() * 90 + 5, // 5%-95%
+            y: Math.random() * 90 + 5
+        };
+    }
+}
+
+// 获取随机消息
+function getRandomMessage() {
+    return MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
+}
+
+// 创建弹窗元素
+function createPopup(index, totalCount) {
+    const popup = document.createElement('div');
+    popup.className = 'popup';
+    
+    // 最后一个弹窗使用独立的内容（初始显示第一个内容）
+    const isLastPopup = (index === totalCount - 1);
+    popup.textContent = isLastPopup ? LAST_POPUP_INITIAL_MESSAGE : getRandomMessage();
+
+    // 设置颜色
+    const color = generatePastelColor();
+    popup.style.backgroundColor = color;
+
+    // 设置位置
+    const position = generatePosition(index, totalCount);
+    popup.style.left = position.x + '%';
+    popup.style.top = position.y + '%';
+
+    // 应用自定义大小
+    popup.style.minWidth = POPUP_MIN_WIDTH + 'px';
+    popup.style.maxWidth = POPUP_MAX_WIDTH + 'px';
+    popup.style.padding = POPUP_PADDING + 'px ' + (POPUP_PADDING + 4) + 'px';
+    popup.style.fontSize = POPUP_FONT_SIZE + 'px';
+    
+    // 最后一个弹窗居中对齐
+    if (isLastPopup) {
+        popup.style.transform = 'translate(-50%, -50%)';
+    }
+
+    return popup;
+}
+
+// 弹窗动画（支持最后一个弹窗的独立动画时长）
+function animatePopup(popup, isLastPopup = false) {
+    const container = document.getElementById('popup-container');
+    container.appendChild(popup);
+
+    // 根据是否是最后一个弹窗选择不同的动画参数
+    const fadeIn = isLastPopup ? LAST_POPUP_FADE_IN : FADE_IN_DURATION;
+    const display = isLastPopup ? LAST_POPUP_DISPLAY : DISPLAY_DURATION;
+    const fadeOut = isLastPopup ? LAST_POPUP_FADE_OUT : FADE_OUT_DURATION;
+    
+    // 设置自定义动画时长
+    popup.style.transition = `opacity ${fadeIn}ms ease, transform ${fadeIn}ms ease`;
+
+    // 淡入
+    setTimeout(() => {
+        popup.classList.add('popup-fade-in');
+    }, 10);
+
+    // 淡出
+    setTimeout(() => {
+        popup.classList.remove('popup-fade-in');
+        popup.classList.add('popup-fade-out');
+        popup.style.transition = `opacity ${fadeOut}ms ease, transform ${fadeOut}ms ease`;
+
+        // 移除元素
+        setTimeout(() => {
+            if (popup.parentNode) {
+                popup.parentNode.removeChild(popup);
+            }
+        }, fadeOut);
+    }, fadeIn + display);
+}
+
+// 批量生成弹窗
+function generatePopups() {
+    const count = window.innerWidth <= 768 ? POPUP_COUNT * 0.6 : POPUP_COUNT;
+    
+    // 计算所有弹窗的总时长，用于让最后一个弹窗最后消失
+    let maxEndTime = 0;
+    const delayTimes = []; // 记录每个弹窗的延迟时间
+
+    // 先生成最后一个弹窗（第一个出现）
+    const lastPopup = createPopup(count - 1, count);
+    
+    // 生成其他弹窗，并记录延迟时间
+    for (let i = 0; i < count - 1; i++) {
+        const delay = i * BASE_DELAY + Math.random() * RANDOM_DELAY;
+        delayTimes.push(delay);
+        const endTime = delay + FADE_IN_DURATION + DISPLAY_DURATION + FADE_OUT_DURATION;
+        
+        if (endTime > maxEndTime) {
+            maxEndTime = endTime;
+        }
+        
+        setTimeout(() => {
+            const popup = createPopup(i, count);
+            animatePopup(popup, false);
+        }, delay);
+    }
+    
+    // 计算剩余最后5个弹窗时的时间点（用于变化内容）
+    const last5Index = Math.max(0, count - 1 - 5); // 倒数第5个弹窗的索引
+    const changeContentTime = last5Index < delayTimes.length ? delayTimes[last5Index] : 0;
+    
+    // 调整最后一个弹窗的显示时长，确保它最后消失，并且至少多停留2秒
+    const adjustedLastDisplay = Math.max(
+        LAST_POPUP_DISPLAY,
+        maxEndTime - LAST_POPUP_FADE_IN - LAST_POPUP_FADE_OUT + 2000  // 额外增加2秒
+    );
+    
+    console.log(`最后一个弹窗总时长: ${adjustedLastDisplay}ms, 其他弹窗最大结束时间: ${maxEndTime}ms`);
+    
+    // 立即显示最后一个弹窗，但使用调整后的显示时长，并在剩余5个弹窗时变化内容
+    animatePopupWithCustomDuration(lastPopup, LAST_POPUP_FADE_IN, adjustedLastDisplay, LAST_POPUP_FADE_OUT, true, changeContentTime);
+}
+
+// 自定义动画时长的弹窗动画函数（支持内容变化）
+function animatePopupWithCustomDuration(popup, fadeIn, display, fadeOut, changeContent = false, changeTime = 0) {
+    const container = document.getElementById('popup-container');
+    container.appendChild(popup);
+    
+    // 设置自定义动画时长
+    popup.style.transition = `opacity ${fadeIn}ms ease, transform ${fadeIn}ms ease`;
+
+    // 淡入
+    setTimeout(() => {
+        popup.classList.add('popup-fade-in');
+    }, 10);
+    
+    // 如果需要变化内容（最后一个弹窗）
+    if (changeContent) {
+        // 在剩余最后5个弹窗时变化内容
+        setTimeout(() => {
+            // 悄悄变化内容
+            popup.textContent = LAST_POPUP_FINAL_MESSAGE;
+        }, changeTime);
+    }
+
+    // 淡出
+    setTimeout(() => {
+        popup.classList.remove('popup-fade-in');
+        popup.classList.add('popup-fade-out');
+        popup.style.transition = `opacity ${fadeOut}ms ease, transform ${fadeOut}ms ease`;
+
+        // 移除元素
+        setTimeout(() => {
+            if (popup.parentNode) {
+                popup.parentNode.removeChild(popup);
+            }
+        }, fadeOut);
+    }, fadeIn + display);
+}
+
+// 页面加载完成后启动
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('启动温馨弹窗系统...');
+    generatePopups();
+
+    // 自动刷新（如果设置了间隔时间）
+    if (AUTO_REFRESH_INTERVAL > 0) {
+        setInterval(generatePopups, AUTO_REFRESH_INTERVAL);
+    }
+});
+    </script>
+</body>
+</html>
