@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Style Selection (20 Styles) - AI Precision Customer Acquisition Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #121212;
+            color: #fff;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        .style-card {
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        
+        .style-card:hover {
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+        
+        .style-header {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .style-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .style-content {
+            padding: 20px;
+        }
+        
+        .demo-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .demo-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .demo-input {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 200px;
+        }
+        
+        .demo-card {
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+        }
+        
+        .demo-card h4 {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .demo-card p {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .color-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* ========== 1-10 Original Styles ========== */
+        
+        /* 1. Minimal White */
+        .style-1 { background: #ffffff; color: #333; }
+        .style-1 .style-header { background: #fafafa; border-bottom: 1px solid #eee; }
+        .style-1 .style-number { background: #333; color: #fff; }
+        .style-1 .demo-btn-primary { background: #333; color: #fff; }
+        .style-1 .demo-btn-secondary { background: #f5f5f5; color: #333; }
+        .style-1 .demo-input { background: #f9f9f9; border: 1px solid #e0e0e0; color: #333; }
+        .style-1 .demo-card { background: #f5f5f5; }
+
+        /* 2. Dark Mode */
+        .style-2 { background: #1e1e1e; color: #e0e0e0; }
+        .style-2 .style-header { background: #252525; border-bottom: 1px solid #333; }
+        .style-2 .style-number { background: #3b82f6; color: #fff; }
+        .style-2 .demo-btn-primary { background: #3b82f6; color: #fff; }
+        .style-2 .demo-btn-secondary { background: #333; color: #e0e0e0; }
+        .style-2 .demo-input { background: #2d2d2d; border: 1px solid #404040; color: #e0e0e0; }
+        .style-2 .demo-card { background: #292929; }
+
+        /* 3. Glassmorphism */
+        .style-3 { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .style-3 .style-header { background: rgba(255,255,255,0.1); }
+        .style-3 .style-number { background: rgba(255,255,255,0.2); }
+        .style-3 .demo-btn-primary { background: rgba(99,102,241,0.8); color: #fff; }
+        .style-3 .demo-btn-secondary { background: rgba(255,255,255,0.15); color: #fff; }
+        .style-3 .demo-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .style-3 .demo-card { background: rgba(255,255,255,0.08); }
+
+        /* 4. Neumorphism */
+        .style-4 { background: #e0e5ec; color: #444; }
+        .style-4 .style-number { background: #6366f1; color: #fff; box-shadow: 3px 3px 6px #bec3c9, -3px -3px 6px #ffffff; }
+        .style-4 .demo-btn-primary { background: #e0e5ec; color: #6366f1; box-shadow: 5px 5px 10px #bec3c9, -5px -5px 10px #ffffff; }
+        .style-4 .demo-btn-secondary { background: #e0e5ec; color: #666; box-shadow: 3px 3px 6px #bec3c9, -3px -3px 6px #ffffff; }
+        .style-4 .demo-input { background: #e0e5ec; border: none; color: #444; box-shadow: inset 3px 3px 6px #bec3c9, inset -3px -3px 6px #ffffff; }
+        .style-4 .demo-card { background: #e0e5ec; box-shadow: 8px 8px 16px #bec3c9, -8px -8px 16px #ffffff; }
+
+        /* 5. Purple-Blue Gradient */
+        .style-5 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; }
+        .style-5 .style-header { background: rgba(0,0,0,0.1); }
+        .style-5 .style-number { background: rgba(255,255,255,0.2); }
+        .style-5 .demo-btn-primary { background: #fff; color: #764ba2; }
+        .style-5 .demo-btn-secondary { background: rgba(255,255,255,0.2); color: #fff; }
+        .style-5 .demo-input { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: #fff; }
+        .style-5 .demo-card { background: rgba(255,255,255,0.15); }
+
+        /* 6. Cyberpunk */
+        .style-6 { background: #0a0a0f; color: #00fff5; border: 1px solid #00fff5; box-shadow: 0 0 15px rgba(0,255,245,0.2); }
+        .style-6 .style-header { background: rgba(0,255,245,0.05); border-bottom: 1px solid rgba(0,255,245,0.3); }
+        .style-6 .style-number { background: #ff0080; color: #fff; box-shadow: 0 0 10px #ff0080; }
+        .style-6 .demo-btn-primary { background: transparent; color: #00fff5; border: 2px solid #00fff5; }
+        .style-6 .demo-btn-primary:hover { background: #00fff5; color: #000; }
+        .style-6 .demo-btn-secondary { background: transparent; color: #ff0080; border: 1px solid #ff0080; }
+        .style-6 .demo-input { background: transparent; border: 1px solid #00fff5; color: #00fff5; }
+        .style-6 .demo-card { background: rgba(0,255,245,0.05); border: 1px solid rgba(0,255,245,0.2); }
+
+        /* 7. Natural Green */
+        .style-7 { background: #f0f7f4; color: #2d5a45; }
+        .style-7 .style-header { background: #e8f3ed; border-bottom: 1px solid #d0e6da; }
+        .style-7 .style-number { background: #22c55e; color: #fff; }
+        .style-7 .demo-btn-primary { background: #22c55e; color: #fff; }
+        .style-7 .demo-btn-secondary { background: #dcfce7; color: #166534; }
+        .style-7 .demo-input { background: #fff; border: 1px solid #a7d9ba; color: #2d5a45; }
+        .style-7 .demo-card { background: #e8f5ed; }
+
+        /* 8. Business Blue */
+        .style-8 { background: #f8fafc; color: #1e3a5f; }
+        .style-8 .style-header { background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+        .style-8 .style-number { background: #0ea5e9; color: #fff; }
+        .style-8 .demo-btn-primary { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: #fff; }
+        .style-8 .demo-btn-secondary { background: #e0f2fe; color: #0369a1; }
+        .style-8 .demo-input { background: #fff; border: 1px solid #bae6fd; color: #1e3a5f; }
+        .style-8 .demo-card { background: #f0f9ff; border: 1px solid #e0f2fe; }
+
+        /* 9. Warm Orange */
+        .style-9 { background: #fffbf5; color: #7c4a03; }
+        .style-9 .style-header { background: #fff7ed; border-bottom: 1px solid #fed7aa; }
+        .style-9 .style-number { background: #f97316; color: #fff; }
+        .style-9 .demo-btn-primary { background: linear-gradient(135deg, #f97316, #ea580c); color: #fff; }
+        .style-9 .demo-btn-secondary { background: #ffedd5; color: #c2410c; }
+        .style-9 .demo-input { background: #fff; border: 1px solid #fdba74; color: #7c4a03; }
+        .style-9 .demo-card { background: #fff7ed; }
+
+        /* 10. Tech Purple */
+        .style-10 { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: #e2e8f0; }
+        .style-10 .style-header { background: rgba(139,92,246,0.1); border-bottom: 1px solid rgba(139,92,246,0.2); }
+        .style-10 .style-number { background: linear-gradient(135deg, #8b5cf6, #a855f7); }
+        .style-10 .demo-btn-primary { background: linear-gradient(135deg, #8b5cf6, #a855f7); color: #fff; }
+        .style-10 .demo-btn-secondary { background: rgba(139,92,246,0.2); color: #c4b5fd; }
+        .style-10 .demo-input { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.3); color: #e2e8f0; }
+        .style-10 .demo-card { background: rgba(139,92,246,0.1); border: 1px solid rgba(139,92,246,0.2); }
+
+        /* ========== 11-20 New Styles ========== */
+
+        /* 11. Retro Pixel */
+        .style-11 { background: #fff; color: #000; border: 4px solid #000; font-family: 'Courier New', monospace; box-shadow: 8px 8px 0 #000; border-radius: 0; }
+        .style-11 .style-header { background: #ffeb3b; border-bottom: 4px solid #000; }
+        .style-11 .style-number { background: #000; color: #fff; border-radius: 0; }
+        .style-11 .demo-btn, .style-11 .demo-input, .style-11 .demo-card { border-radius: 0; }
+        .style-11 .demo-btn-primary { background: #ff0055; color: #fff; border: 2px solid #000; box-shadow: 2px 2px 0 #000; }
+        .style-11 .demo-btn-secondary { background: #00e5ff; color: #000; border: 2px solid #000; box-shadow: 2px 2px 0 #000; }
+        .style-11 .demo-input { border: 2px solid #000; background: #fff; color: #000; }
+        .style-11 .demo-card { border: 2px solid #000; background: #eeeeee; }
+
+        /* 12. Wireframe */
+        .style-12 { background: #fff; color: #000; border: 1px solid #000; border-radius: 0; }
+        .style-12 .style-header { border-bottom: 1px solid #000; background: #fff; }
+        .style-12 .style-number { border: 1px solid #000; background: #fff; color: #000; }
+        .style-12 .demo-btn-primary { background: #000; color: #fff; border: 1px solid #000; border-radius: 0; }
+        .style-12 .demo-btn-secondary { background: #fff; color: #000; border: 1px solid #000; border-radius: 0; }
+        .style-12 .demo-input { border: 1px solid #000; border-radius: 0; background: #fff; color: #000; border-bottom: 3px solid #000; }
+        .style-12 .demo-card { border: 1px dashed #000; border-radius: 0; background: #fafafa; }
+
+        /* 13. Memphis */
+        .style-13 { background: #fefce8; color: #000; border: 2px solid #000; box-shadow: 6px 6px 0 #fcd34d; }
+        .style-13 .style-header { background: #bfdbfe; border-bottom: 2px solid #000; }
+        .style-13 .style-number { background: #fca5a5; color: #000; border: 2px solid #000; }
+        .style-13 .demo-btn-primary { background: #fca5a5; color: #000; border: 2px solid #000; box-shadow: 3px 3px 0 #000; }
+        .style-13 .demo-btn-secondary { background: #86efac; color: #000; border: 2px solid #000; box-shadow: 3px 3px 0 #000; }
+        .style-13 .demo-input { border: 2px solid #000; background: #fff; color: #000; }
+        .style-13 .demo-card { background: #fff; border: 2px solid #000; background-image: radial-gradient(#000 1px, transparent 1px); background-size: 10px 10px; }
+
+        /* 14. Luxury Gold */
+        .style-14 { background: #0c0c0c; color: #d4af37; border: 1px solid #d4af37; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+        .style-14 .style-header { border-bottom: 1px solid #d4af37; background: linear-gradient(to right, #0c0c0c, #1a1a1a); }
+        .style-14 .style-number { background: linear-gradient(135deg, #d4af37, #f9e59d); color: #000; }
+        .style-14 .demo-btn-primary { background: linear-gradient(135deg, #d4af37, #aa8a29); color: #000; font-weight: bold; }
+        .style-14 .demo-btn-secondary { border: 1px solid #d4af37; background: transparent; color: #d4af37; }
+        .style-14 .demo-input { background: transparent; border: 1px solid #554411; color: #d4af37; }
+        .style-14 .demo-card { background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.2); }
+
+        /* 15. Macaron */
+        .style-15 { background: #fff0f5; color: #555; border-radius: 24px; }
+        .style-15 .style-header { background: #ffe4e1; border-bottom: 2px dashed #ffb6c1; }
+        .style-15 .style-number { background: #ff69b4; color: #fff; }
+        .style-15 .demo-btn-primary { background: #ffb6c1; color: #fff; border-radius: 20px; }
+        .style-15 .demo-btn-secondary { background: #e0ffff; color: #5f9ea0; border-radius: 20px; }
+        .style-15 .demo-input { background: #fff; border: 2px solid #ffb6c1; border-radius: 20px; color: #555; }
+        .style-15 .demo-card { background: #fff; border-radius: 20px; border: 1px solid #ffe4e1; }
+
+        /* 16. Industrial Gray */
+        .style-16 { background: #374151; color: #d1d5db; border-top: 4px solid #f59e0b; border-radius: 4px; font-family: monospace; }
+        .style-16 .style-header { background: #1f2937; border-bottom: 1px solid #4b5563; }
+        .style-16 .style-number { background: #f59e0b; color: #000; border-radius: 2px; }
+        .style-16 .demo-btn-primary { background: #4b5563; color: #f59e0b; border: 1px solid #f59e0b; border-radius: 2px; text-transform: uppercase; }
+        .style-16 .demo-btn-secondary { background: transparent; color: #9ca3af; border: 1px solid #6b7280; border-radius: 2px; }
+        .style-16 .demo-input { background: #111827; border: 1px solid #6b7280; color: #10b981; font-family: monospace; }
+        .style-16 .demo-card { background: #1f2937; border: 1px solid #4b5563; border-left: 2px solid #f59e0b; }
+
+        /* 17. Terracotta */
+        .style-17 { background: #e7ded9; color: #5d4037; }
+        .style-17 .style-header { background: #d7ccc8; border-bottom: 1px solid #a1887f; }
+        .style-17 .style-number { background: #8d6e63; color: #fff; }
+        .style-17 .demo-btn-primary { background: #8d6e63; color: #fff; }
+        .style-17 .demo-btn-secondary { background: #efebe9; color: #5d4037; border: 1px solid #bcaaa4; }
+        .style-17 .demo-input { background: #fff; border: 1px solid #bcaaa4; color: #5d4037; }
+        .style-17 .demo-card { background: #f5f5f5; border-left: 4px solid #8d6e63; }
+
+        /* 18. Aurora */
+        .style-18 { background: #0f172a; color: #e2e8f0; position: relative; overflow: hidden; }
+        .style-18::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.1), rgba(168, 85, 247, 0.05), transparent 70%); z-index: 0; pointer-events: none; }
+        .style-18 .style-header, .style-18 .style-content { position: relative; z-index: 1; }
+        .style-18 .style-header { background: rgba(30, 41, 59, 0.5); border-bottom: 1px solid rgba(56, 189, 248, 0.2); }
+        .style-18 .style-number { background: linear-gradient(to right, #38bdf8, #818cf8); }
+        .style-18 .demo-btn-primary { background: linear-gradient(90deg, #0ea5e9, #a855f7); color: #fff; }
+        .style-18 .demo-btn-secondary { background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); }
+        .style-18 .demo-input { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.3); color: #fff; }
+        .style-18 .demo-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); }
+
+        /* 19. Editorial */
+        .style-19 { background: #f9f7f1; color: #1c1917; font-family: 'Georgia', 'Times New Roman', serif; border: 1px solid #e7e5e4; }
+        .style-19 .style-header { border-bottom: 3px double #1c1917; background: #f9f7f1; font-style: italic; }
+        .style-19 .style-number { background: #1c1917; color: #f9f7f1; font-family: sans-serif; }
+        .style-19 .demo-btn-primary { background: #1c1917; color: #fff; border-radius: 0; font-family: sans-serif; letter-spacing: 1px; }
+        .style-19 .demo-btn-secondary { background: transparent; color: #1c1917; border: 1px solid #1c1917; border-radius: 0; font-family: sans-serif; }
+        .style-19 .demo-input { background: #fff; border: 1px solid #1c1917; border-radius: 0; color: #1c1917; }
+        .style-19 .demo-card { background: #fff; border: 1px solid #e7e5e4; padding: 20px; }
+        
+        /* 20. Frosted Acrylic */
+        .style-20 { background: rgba(255, 255, 255, 0.85); color: #333; backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
+        .style-20 .style-header { background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .style-20 .style-number { background: rgba(0,0,0,0.8); color: #fff; }
+        .style-20 .demo-btn-primary { background: #333; color: #fff; opacity: 0.9; }
+        .style-20 .demo-btn-secondary { background: rgba(255,255,255,0.8); color: #333; border: 1px solid rgba(0,0,0,0.1); }
+        .style-20 .demo-input { background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1); color: #333; }
+        .style-20 .demo-card { background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,1); }
+
+    </style>
+</head>
+<body>
+    <h1>🎨 UI Style Selection (20 Styles)</h1>
+    <p class="subtitle">Please browse and select your preferred style, which will serve as the theme foundation for the application</p>
+    
+    <div class="grid">
+        <!-- 1-10 Original Styles -->
+        <div class="style-card style-1"><div class="style-header"><span>1. Minimal White</span><span class="style-number">1</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Classic and clear, information-focused</p></div><div class="color-palette"><span class="color-dot" style="background:#333"></span><span class="color-dot" style="background:#fff"></span></div></div></div>
+        
+        <div class="style-card style-2"><div class="style-header"><span>2. Dark Mode</span><span class="style-number">2</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Deep and eye-friendly, geek's choice</p></div><div class="color-palette"><span class="color-dot" style="background:#1e1e1e"></span><span class="color-dot" style="background:#3b82f6"></span></div></div></div>
+        
+        <div class="style-card style-3"><div class="style-header"><span>3. Glassmorphism</span><span class="style-number">3</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Transparent and hazy, modern texture</p></div><div class="color-palette"><span class="color-dot" style="background:rgba(255,255,255,0.2)"></span></div></div></div>
+        
+        <div class="style-card style-4"><div class="style-header"><span>4. Neumorphism</span><span class="style-number">4</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Soft and 3D, realistic touch</p></div><div class="color-palette"><span class="color-dot" style="background:#e0e5ec"></span></div></div></div>
+        
+        <div class="style-card style-5"><div class="style-header"><span>5. Purple-Blue Gradient</span><span class="style-number">5</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Vibrant colors, youthful energy</p></div><div class="color-palette"><span class="color-dot" style="background:#764ba2"></span></div></div></div>
+        
+        <div class="style-card style-6"><div class="style-header"><span>6. Cyberpunk</span><span class="style-number">6</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Neon glitch, futuristic sci-fi</p></div><div class="color-palette"><span class="color-dot" style="background:#00fff5"></span><span class="color-dot" style="background:#ff0080"></span></div></div></div>
+        
+        <div class="style-card style-7"><div class="style-header"><span>7. Natural Green</span><span class="style-number">7</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Fresh and healing, forest style</p></div><div class="color-palette"><span class="color-dot" style="background:#22c55e"></span></div></div></div>
+        
+        <div class="style-card style-8"><div class="style-header"><span>8. Business Blue</span><span class="style-number">8</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Stable and reliable, enterprise choice</p></div><div class="color-palette"><span class="color-dot" style="background:#0ea5e9"></span></div></div></div>
+        
+        <div class="style-card style-9"><div class="style-header"><span>9. Warm Orange</span><span class="style-number">9</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Warm and friendly, service-oriented</p></div><div class="color-palette"><span class="color-dot" style="background:#f97316"></span></div></div></div>
+        
+        <div class="style-card style-10"><div class="style-header"><span>10. Tech Purple</span><span class="style-number">10</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Mysterious and premium, AI exclusive</p></div><div class="color-palette"><span class="color-dot" style="background:#8b5cf6"></span></div></div></div>
+
+        <!-- 11-20 New Styles -->
+        
+        <!-- 11. Retro Pixel -->
+        <div class="style-card style-11">
+            <div class="style-header">
+                <span>11. Retro Pixel</span>
+                <span class="style-number">11</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">START</button>
+                    <button class="demo-btn demo-btn-secondary">RESET</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="INSERT COIN...">
+                </div>
+                <div class="demo-card">
+                    <h4>PLAYER 1</h4>
+                    <p>8-BIT retro game style</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#ff0055"></span>
+                    <span class="color-dot" style="background:#00e5ff"></span>
+                    <span class="color-dot" style="background:#ffeb3b"></span>
+                    <span class="color-dot" style="background:#000"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. Wireframe -->
+        <div class="style-card style-12">
+            <div class="style-header">
+                <span>12. Wireframe</span>
+                <span class="style-number">12</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Confirm</button>
+                    <button class="demo-btn demo-btn-secondary">Cancel</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Type here...">
+                </div>
+                <div class="demo-card">
+                    <h4>Blueprint</h4>
+                    <p>Pure lines, prototype feel</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#fff"></span>
+                    <span class="color-dot" style="background:#000"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. Memphis -->
+        <div class="style-card style-13">
+            <div class="style-header">
+                <span>13. Memphis</span>
+                <span class="style-number">13</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">WOW!</button>
+                    <button class="demo-btn demo-btn-secondary">COOL</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Pop Art...">
+                </div>
+                <div class="demo-card">
+                    <h4>Artistic</h4>
+                    <p>High saturation colors, geometric fun</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#fefce8"></span>
+                    <span class="color-dot" style="background:#fca5a5"></span>
+                    <span class="color-dot" style="background:#bfdbfe"></span>
+                    <span class="color-dot" style="background:#000"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. Luxury -->
+        <div class="style-card style-14">
+            <div class="style-header">
+                <span>14. Luxury</span>
+                <span class="style-number">14</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">VIP</button>
+                    <button class="demo-btn demo-btn-secondary">Member</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Premium...">
+                </div>
+                <div class="demo-card">
+                    <h4>Exclusive</h4>
+                    <p>Black and gold, premium and high-end</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#0c0c0c"></span>
+                    <span class="color-dot" style="background:#d4af37"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. Macaron -->
+        <div class="style-card style-15">
+            <div class="style-header">
+                <span>15. Macaron</span>
+                <span class="style-number">15</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Sweet</button>
+                    <button class="demo-btn demo-btn-secondary">Cute</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Sweet...">
+                </div>
+                <div class="demo-card">
+                    <h4>Cute Style</h4>
+                    <p>Round and soft, girly colors</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#ffb6c1"></span>
+                    <span class="color-dot" style="background:#e0ffff"></span>
+                    <span class="color-dot" style="background:#fff0f5"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16. Industrial -->
+        <div class="style-card style-16">
+            <div class="style-header">
+                <span>16. Industrial</span>
+                <span class="style-number">16</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">EXECUTE</button>
+                    <button class="demo-btn demo-btn-secondary">ABORT</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="CMD_INPUT...">
+                </div>
+                <div class="demo-card">
+                    <h4>SYSTEM LOG</h4>
+                    <p>Mechanical, hardcore, engineering feel</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#374151"></span>
+                    <span class="color-dot" style="background:#f59e0b"></span>
+                    <span class="color-dot" style="background:#9ca3af"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 17. Terracotta -->
+        <div class="style-card style-17">
+            <div class="style-header">
+                <span>17. Terracotta</span>
+                <span class="style-number">17</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Explore</button>
+                    <button class="demo-btn demo-btn-secondary">Return</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Search...">
+                </div>
+                <div class="demo-card">
+                    <h4>Natural</h4>
+                    <p>Earth tones, warm and rustic</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#8d6e63"></span>
+                    <span class="color-dot" style="background:#e7ded9"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 18. Aurora -->
+        <div class="style-card style-18">
+            <div class="style-header">
+                <span>18. Aurora</span>
+                <span class="style-number">18</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Flow</button>
+                    <button class="demo-btn demo-btn-secondary">Glow</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Search...">
+                </div>
+                <div class="demo-card">
+                    <h4>Mysterious</h4>
+                    <p>Deep background, flowing colors</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#0f172a"></span>
+                    <span class="color-dot" style="background:#38bdf8"></span>
+                    <span class="color-dot" style="background:#a855f7"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 19. Editorial -->
+        <div class="style-card style-19">
+            <div class="style-header">
+                <span>19. Editorial</span>
+                <span class="style-number">19</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Read More</button>
+                    <button class="demo-btn demo-btn-secondary">Index</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Query...">
+                </div>
+                <div class="demo-card">
+                    <h4>The Daily</h4>
+                    <p>Serif font, paper reading feel</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:#f9f7f1"></span>
+                    <span class="color-dot" style="background:#1c1917"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 20. Acrylic -->
+        <div class="style-card style-20">
+            <div class="style-header">
+                <span>20. Acrylic</span>
+                <span class="style-number">20</span>
+            </div>
+            <div class="style-content">
+                <div class="demo-row">
+                    <button class="demo-btn demo-btn-primary">Action</button>
+                    <button class="demo-btn demo-btn-secondary">Skip</button>
+                </div>
+                <div class="demo-row">
+                    <input class="demo-input" placeholder="Type...">
+                </div>
+                <div class="demo-card">
+                    <h4>Frosted</h4>
+                    <p>Thick frosted, light diffusion</p>
+                </div>
+                <div class="color-palette">
+                    <span class="color-dot" style="background:rgba(255,255,255,0.8)"></span>
+                    <span class="color-dot" style="background:#333"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align: center; margin-top: 50px; color: #666; padding-bottom: 50px;">
+        <p>Please tell me your selected style number (1-20), future development will use this style consistently</p>
+    </div>
+</body>
+</html>
