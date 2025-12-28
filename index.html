@@ -3,449 +3,973 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rance's Blog</title>
+    <title>梁芳源的技术博客</title>
     <style>
-/* 导入现代字体 */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* 页面基础样式 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #f0f9ff;
+            --text-primary: #1e3a5f;
+            --text-secondary: #64748b;
+            --accent: #0ea5e9;
+            --accent-dark: #0284c7;
+            --accent-darker: #0369a1;
+            --border: #e2e8f0;
+            --border-light: #bae6fd;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-body {
-    font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #ffeef8 0%, #e8f5ff 25%, #fff0e6 50%, #f0fff0 75%, #fdf2ff 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 15s ease infinite;
-    min-height: 100vh;
-    overflow: hidden;
-    position: relative;
-}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-/* 背景渐变动画 */
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
+        /* Header */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(241, 245, 249, 0.9);
+        }
 
-/* 弹窗容器样式 */
-#popup-container {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-}
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.popup-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
 
-/* 基础弹窗样式 - 现代玻璃态设计 */
-.popup {
-    position: absolute;
-    min-width: 140px;
-    max-width: 200px;
-    padding: 18px 24px;
-    border-radius: 20px;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: 'Poppins', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
-    text-align: center;
-    color: #ffffff;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        0 2px 8px rgba(255, 255, 255, 0.1) inset;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(255, 255, 255, 0.15);
-    cursor: default;
-    user-select: none;
-    z-index: 1000;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: opacity 0.02s ease, transform 0.02s ease;
-    letter-spacing: 0.3px;
-    line-height: 1.5;
-}
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
 
-/* 响应式设计 - 现在由JavaScript动态控制，使用MOBILE_SCALE_RATIO参数 */
+        .nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
 
-/* 居中弹窗特殊样式 */
-.popup.center-popup {
-    transform: translate(-50%, -50%) scale(0.8) !important;
-}
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
 
-.popup.center-popup.popup-fade-in {
-    transform: translate(-50%, -50%) scale(1) !important;
-}
+        .nav-link:hover::after {
+            width: 100%;
+        }
 
-.popup.center-popup.popup-fade-out {
-    transform: translate(-50%, -50%) scale(0.8) !important;
-}
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
 
-/* 淡入动画效果 */
-.popup-fade-in {
-    opacity: 1 !important;
-    transform: scale(1) !important;
-    transition: opacity 0.02s ease, transform 0.02s ease;
-}
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
 
-/* 淡出动画效果 */
-.popup-fade-out {
-    opacity: 0 !important;
-    transform: scale(0.8) !important;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
+        .sidebar-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
 
-/* 动画关键帧 */
-@keyframes popupFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
+        .sidebar-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
 
-@keyframes popupFadeOut {
-    from {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-    to {
-        opacity: 0;
-        transform: scale(0.8) translateY(-10px);
-    }
-}
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: block;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
 
-/* 动画类 */
-.popup-animate-in {
-    animation: popupFadeIn 0.02s ease forwards;
-}
+        .sidebar h3 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
 
-.popup-animate-out {
-    animation: popupFadeOut 0.3s ease forwards;
-}
+        .sidebar p {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .skill-tag {
+            background: var(--bg-card);
+            color: var(--accent-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .skill-tag:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        main {
+            min-height: 100vh;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-dark), var(--accent-darker));
+        }
+
+        .hero-card h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-card p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Blog Posts */
+        .blog-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .blog-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .blog-card:hover::after {
+            left: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .blog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .blog-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .blog-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-ongoing {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--accent);
+        }
+
+        .blog-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .blog-tag {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .blog-tag:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px var(--border);
+        }
+
+        .timeline-date {
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-card h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-dark);
+        }
     </style>
 </head>
 <body>
-    <div id="popup-container"></div>
+    <header>
+        <nav>
+            <div class="logo">技术博客</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link">首页</a></li>
+                <li><a href="#projects" class="nav-link">项目经历</a></li>
+                <li><a href="#skills" class="nav-link">专业技能</a></li>
+                <li><a href="#timeline" class="nav-link">时间线</a></li>
+                <li><a href="#contact" class="nav-link">联系我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-card">
+                <div class="profile-img">梁</div>
+                <h3>梁芳源</h3>
+                <p>嵌入式软件开发工程师</p>
+                <p style="text-align: center; font-size: 0.85rem; margin-top: 1rem;">
+                    中共党员 | 广东石油化工学院<br>
+                    2年外企工作经验
+                </p>
+            </div>
+
+            <div class="sidebar-card">
+                <h4 style="margin-bottom: 1rem;">核心技能</h4>
+                <div class="skill-tags">
+                    <span class="skill-tag">C语言</span>
+                    <span class="skill-tag">FreeRTOS</span>
+                    <span class="skill-tag">ESP32</span>
+                    <span class="skill-tag">STM32</span>
+                    <span class="skill-tag">MQTT</span>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Web开发</span>
+                    <span class="skill-tag">MySQL</span>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <h4 style="margin-bottom: 1rem;">荣誉奖项</h4>
+                <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                    <p style="margin-bottom: 0.5rem;">🏆 2024年全国大学生电子设计竞赛（广东赛区一等奖）</p>
+                    <p style="margin-bottom: 0.5rem;">🏆 2022年全国大学生电子设计竞赛（广东赛区二等奖）</p>
+                    <p>🎓 2025届本科优秀毕业证书（设计）</p>
+                </div>
+            </div>
+        </aside>
+
+        <main>
+            <section id="home" class="hero-card fade-in">
+                <h1>你好，我是梁芳源</h1>
+                <p>一名热爱技术的嵌入式软件开发工程师，专注于物联网、嵌入式系统和全栈开发。拥有丰富的项目实战经验，善于解决复杂的技术问题。</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2+</div>
+                        <div class="stat-label">年工作经验</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">完成项目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">技术领域</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">200+</div>
+                        <div class="stat-label">天稳定运行</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="blog-section">
+                <h2 class="section-title">项目经历</h2>
+                
+                <article class="blog-card" onclick="expandProject(this)">
+                    <div class="blog-header">
+                        <div>
+                            <h3 class="blog-title">3通道双向载荷DTU及数据分析平台</h3>
+                            <p class="blog-date">2024.6 ~ 至今</p>
+                        </div>
+                        <span class="blog-status status-ongoing">进行中</span>
+                    </div>
+                    <div class="blog-content">
+                        <p>基于WiFi的串口数据上传模块，从0到1全栈开发。实现数据采集至云端，服务器端分析与统计，Web端可视化展示。已接入林斯中国、越南工厂，出口美国4台设备。日均数据10K+，单设备日极限承载432K条数据，稳定运行超200天。</p>
+                        <div style="margin-top: 1rem; display: none;" class="project-details">
+                            <h4 style="margin-bottom: 0.5rem;">技术栈：</h4>
+                            <p>ESP32S3 + FreeRTOS + MQTT + MySQL + Python Flask + HTML5 + ECharts</p>
+                            <h4 style="margin: 1rem 0 0.5rem;">主要职责：</h4>
+                            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                                <li>主导ESP32S3模组FreeRTOS多任务系统架构设计</li>
+                                <li>构建高可靠数据传输管理机制</li>
+                                <li>开发智能化参数管理系统</li>
+                                <li>搭建IoT服务器环境与MQTT Message Bridge</li>
+                                <li>开发数据可视化Web应用</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">ESP32</span>
+                        <span class="blog-tag">FreeRTOS</span>
+                        <span class="blog-tag">MQTT</span>
+                        <span class="blog-tag">Python</span>
+                        <span class="blog-tag">Web开发</span>
+                    </div>
+                </article>
+
+                <article class="blog-card" onclick="expandProject(this)">
+                    <div class="blog-header">
+                        <div>
+                            <h3 class="blog-title">挂壁式自动洗手机（第二代）</h3>
+                            <p class="blog-date">2024.9 ~ 2024.12</p>
+                        </div>
+                        <span class="blog-status status-completed">已完成</span>
+                    </div>
+                    <div class="blog-content">
+                        <p>基于STM32F1051的智能化非接触式自动出液洗手装置。采用红外感应技术实现0~300ms极速响应，超低功耗设计（静态功耗0.005mAh），6节干电池支持3万次使用。产品出口美国，年产量50k台。</p>
+                        <div style="margin-top: 1rem; display: none;" class="project-details">
+                            <h4 style="margin-bottom: 0.5rem;">技术亮点：</h4>
+                            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                                <li>修复红外误触发BUG（误触发率从0.7%降至0%）</li>
+                                <li>解决异常耗电问题（功耗从50mAh恢复正常）</li>
+                                <li>优化电机驱动系统（故障率降低98%）</li>
+                                <li>彻底解决漏液问题（位置控制精度±0.5mm）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">STM32</span>
+                        <span class="blog-tag">低功耗</span>
+                        <span class="blog-tag">传感器</span>
+                        <span class="blog-tag">PID控制</span>
+                    </div>
+                </article>
+
+                <article class="blog-card" onclick="expandProject(this)">
+                    <div class="blog-header">
+                        <div>
+                            <h3 class="blog-title">户外电蚊香（带NFC版本）</h3>
+                            <p class="blog-date">2025.1 ~ 2025.9</p>
+                        </div>
+                        <span class="blog-status status-completed">已完成</span>
+                    </div>
+                    <div class="blog-content">
+                        <p>便捷式户外电蚊香，增加NFC功能并兼容耗材。主控从STC8H1K08升级至STC8H8K64U，采用MA1612A NFC芯片，感应距离52~68mm。不带NFC版本已出口1000k，带NFC版本2025年试产1K。</p>
+                        <div style="margin-top: 1rem; display: none;" class="project-details">
+                            <h4 style="margin-bottom: 0.5rem;">技术创新：</h4>
+                            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                                <li>主导芯片选型与成本优化</li>
+                                <li>嵌入式软件分层架构设计</li>
+                                <li>构建Git版本控制体系</li>
+                                <li>NFC底层驱动开发</li>
+                                <li>双层防伪验证系统设计</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">STC</span>
+                        <span class="blog-tag">NFC</span>
+                        <span class="blog-tag">SPI</span>
+                        <span class="blog-tag">SHA加密</span>
+                    </div>
+                </article>
+
+                <article class="blog-card" onclick="expandProject(this)">
+                    <div class="blog-header">
+                        <div>
+                            <h3 class="blog-title">批量条形码扫描微信小程序</h3>
+                            <p class="blog-date">2025.9 ~ 2025.10</p>
+                        </div>
+                        <span class="blog-status status-completed">已完成</span>
+                    </div>
+                    <div class="blog-content">
+                        <p>基于微信小程序的批量条形码扫描与数据导出工具，专为公司出货管理与跟踪设计。采用TypeScript + 微信小程序原生框架开发，已备案。</p>
+                        <div style="margin-top: 1rem; display: none;" class="project-details">
+                            <h4 style="margin-bottom: 0.5rem;">功能特点：</h4>
+                            <ul style="margin-left: 1.5rem; color: var(--text-secondary);">
+                                <li>批量扫码功能（单次/连续模式）</li>
+                                <li>本地数据持久化存储</li>
+                                <li>CSV格式数据导出与分享</li>
+                                <li>响应式UI设计</li>
+                                <li>隐私合规与安全保护</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="blog-tags">
+                        <span class="blog-tag">微信小程序</span>
+                        <span class="blog-tag">TypeScript</span>
+                        <span class="blog-tag">UI设计</span>
+                    </div>
+                </article>
+            </section>
+
+            <section id="skills" class="blog-section">
+                <h2 class="section-title">专业技能</h2>
+                
+                <div class="blog-card">
+                    <h3 style="margin-bottom: 1rem;">编程语言与工具</h3>
+                    <div class="skill-tags" style="margin-bottom: 2rem;">
+                        <span class="skill-tag">C语言</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Shell</span>
+                        <span class="skill-tag">HTTP</span>
+                        <span class="skill-tag">CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Markdown</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">JSON</span>
+                        <span class="skill-tag">XML</span>
+                    </div>
+
+                    <h3 style="margin-bottom: 1rem;">网络通讯协议</h3>
+                    <div class="skill-tags" style="margin-bottom: 2rem;">
+                        <span class="skill-tag">HTTP</span>
+                        <span class="skill-tag">MQTT</span>
+                        <span class="skill-tag">TCP</span>
+                        <span class="skill-tag">UDP</span>
+                        <span class="skill-tag">RTMP</span>
+                    </div>
+
+                    <h3 style="margin-bottom: 1rem;">嵌入式开发</h3>
+                    <div class="skill-tags" style="margin-bottom: 2rem;">
+                        <span class="skill-tag">FreeRTOS</span>
+                        <span class="skill-tag">低功耗设计</span>
+                        <span class="skill-tag">生产者-消费者模型</span>
+                        <span class="skill-tag">Debug系统</span>
+                        <span class="skill-tag">PID算法</span>
+                        <span class="skill-tag">卡尔曼滤波</span>
+                        <span class="skill-tag">CRC16/Modbus</span>
+                        <span class="skill-tag">SHA-256</span>
+                    </div>
+
+                    <h3 style="margin-bottom: 1rem;">硬件协议</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">I2C</span>
+                        <span class="skill-tag">SPI</span>
+                        <span class="skill-tag">UART</span>
+                        <span class="skill-tag">RS485</span>
+                        <span class="skill-tag">Modbus</span>
+                        <span class="skill-tag">RS232</span>
+                        <span class="skill-tag">USB</span>
+                        <span class="skill-tag">TIM</span>
+                        <span class="skill-tag">EXTI</span>
+                        <span class="skill-tag">ADC</span>
+                        <span class="skill-tag">DMA</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="timeline" class="blog-section">
+                <h2 class="section-title">经历时间线</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024.6 ~ 至今</div>
+                        <div class="timeline-content">
+                            <h4>嵌入式软件开发工程师</h4>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem;">东莞林斯电子产品有限公司</p>
+                            <p style="margin-top: 1rem;">负责IoT设备开发、嵌入式系统设计、全栈开发等工作</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024.8 ~ 2024.9</div>
+                        <div class="timeline-content">
+                            <h4>TI杯全国大学生电子设计竞赛</h4>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem;">广东赛区一等奖</p>
+                            <p style="margin-top: 1rem;">基于MSPM0G3507芯片的自制循迹小车</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022.8 ~ 2024.9</div>
+                        <div class="timeline-content">
+                            <h4>广东石油化工学院</h4>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem;">电子21-3班</p>
+                            <p style="margin-top: 1rem;">班级协调、智慧农业实验室科研助理</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">2022.8 ~ 2022.9</div>
+                        <div class="timeline-content">
+                            <h4>广东省大学生电子设计竞赛</h4>
+                            <p style="color: var(--text-secondary); margin-top: 0.5rem;">广东赛区二等奖</p>
+                            <p style="margin-top: 1rem;">基于物联网结合云服务器的智能穿戴设备</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" class="social-link">📧</a>
+                <a href="#" class="social-link">💼</a>
+                <a href="#" class="social-link">🔗</a>
+                <a href="#" class="social-link">📱</a>
+            </div>
+            <p style="color: var(--text-secondary);">© 2025 梁芳源的技术博客. All rights reserved.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                期望薪资：15-25K | 求职意向：嵌入式软件开发工程师
+            </p>
+        </div>
+    </footer>
+
     <script>
-// ==================== 可调参数配置（在这里修改） ====================
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
-// 弹窗数量（桌面端显示的弹窗总数，移动端会自动减少到60%）
-const POPUP_COUNT = 60;
-
-// 弹窗大小（像素）
-const POPUP_MIN_WIDTH = 240;      // 最小宽度
-const POPUP_MAX_WIDTH = 360;      // 最大宽度
-const POPUP_PADDING = 20;         // 内边距
-const POPUP_FONT_SIZE = 22;       // 字体大小
-
-// 移动端缩小比例（0-1之间的小数，如0.6表示缩小到60%）
-const MOBILE_SCALE_RATIO = 0.6;   // 移动端弹窗大小比例（相对于桌面端）
-
-// 动画速度（毫秒）
-const FADE_IN_DURATION = 800;      // 淡入速度（数字越小越快）
-const DISPLAY_DURATION = 1600;    // 显示时长
-const FADE_OUT_DURATION = 200;    // 淡出速度（数字越小越快）
-
-// 弹窗出现间隔（毫秒）
-const BASE_DELAY = 220;           // 每个弹窗之间的基础间隔
-const RANDOM_DELAY = 2000;        // 额外的随机延迟（0到这个数之间）
-
-// 从中间向外扩散效果
-const CENTER_START_COUNT = 38;    // 从中间开始扩散的弹窗数量
-const CENTER_SPREAD_RADIUS = 50;  // 扩散的最大半径（百分比，45表示从中心向外最多扩散45%）
-
-// 回归中间效果
-const CENTER_END_COUNT = 20;      // 最后多少个弹窗回归到中间
-const CENTER_RETURN_RADIUS = 35;  // 回归时的最大半径（百分比，数值越小越靠近中心）
-
-// 弹窗集中度设置（让大部分弹窗集中在画面中间）
-const CENTER_AREA_WIDTH = 65;     // 中心区域宽度（百分比，如70表示画面中间70%的宽度）
-const CENTER_AREA_HEIGHT = 65;    // 中心区域高度（百分比，如70表示画面中间70%的高度）
-const CENTER_PROBABILITY = 0.85;  // 弹窗出现在中心区域的概率（0.75表示75%的弹窗在中心）
-
-// 自动刷新间隔（毫秒，设为0则不自动刷新）
-const AUTO_REFRESH_INTERVAL = 30000;
-
-// 温馨话语（可以随意添加或修改）
-const MESSAGES = [
-    '多喝水哦', '保持微笑', '每天都要元气满满', '记得吃水果',
-    '保持好心情', '好好爱自己', '梦想成真', 
-    '顺顺利利', '早点休息别熬夜', '今天过得开心嘛',
-    '天冷了，多穿衣服', '加油加油','冲冲冲'
-];
-
-// ==================== 最后一个弹窗独立配置 ====================
-// 最后一个弹窗会固定在屏幕正中间，并且可以独立设置样式和内容
-
-const LAST_POPUP_INITIAL_MESSAGE = 'Hi';  // 最后一个弹窗的初始内容
-const LAST_POPUP_FINAL_MESSAGE = 'bye-bye';  // 最后一个弹窗的最终内容
-const LAST_POPUP_CHANGE_DELAY = 4000;           // 内容变化的延迟时间（毫秒，从出现开始计算）
-const LAST_POPUP_FADE_IN = 800;                 // 最后一个弹窗淡入速度（毫秒）
-const LAST_POPUP_DISPLAY = 4600;                // 最后一个弹窗显示时长（毫秒）
-const LAST_POPUP_FADE_OUT = 800;                // 最后一个弹窗淡出速度（毫秒）
-
-// ==================== 核心代码（一般不需要修改） ====================
-
-// 生成浅色系颜色（稍微深一点，更有质感）
-function generatePastelColor() {
-    const hue = Math.floor(Math.random() * 360);
-    const saturation = Math.floor(Math.random() * 35) + 50;  // 50-85%，比之前更饱和
-    const lightness = Math.floor(Math.random() * 15) + 70;   // 70-85%，比之前稍深
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-}
-
-// 生成随机位置（支持从中间向外扩散 + 中心区域集中 + 回归中间 + 最后一个固定中间）
-function generatePosition(index, totalCount) {
-    // 最后一个弹窗固定在屏幕正中间
-    if (index === totalCount - 1) {
-        return { x: 50, y: 50 };
-    }
-    
-    // 前N个弹窗从中间向外扩散
-    if (index < CENTER_START_COUNT) {
-        const progress = index / CENTER_START_COUNT; // 0到1的进度
-        const radius = progress * CENTER_SPREAD_RADIUS;
-        
-        // 随机角度
-        const angle = Math.random() * Math.PI * 2;
-        
-        // 计算位置（以屏幕中心为原点）
-        const x = 50 + Math.cos(angle) * radius;
-        const y = 50 + Math.sin(angle) * radius;
-        
-        return { x, y };
-    }
-    
-    // 最后N个弹窗（除了最后一个特殊弹窗）回归到中间
-    const endThreshold = totalCount - 1 - CENTER_END_COUNT; // 减1是因为最后一个是特殊弹窗
-    if (index >= endThreshold && index < totalCount - 1) {
-        // 计算回归进度（从外向内，1到0）
-        const remainingCount = totalCount - 1 - index;
-        const progress = remainingCount / CENTER_END_COUNT; // 1到0的进度
-        const radius = progress * CENTER_RETURN_RADIUS;
-        
-        // 随机角度
-        const angle = Math.random() * Math.PI * 2;
-        
-        // 计算位置（以屏幕中心为原点）
-        const x = 50 + Math.cos(angle) * radius;
-        const y = 50 + Math.sin(angle) * radius;
-        
-        return { x, y };
-    }
-    
-    // 中间的弹窗：根据概率决定是在中心区域还是全屏随机
-    const inCenterArea = Math.random() < CENTER_PROBABILITY;
-    
-    if (inCenterArea) {
-        // 在中心区域内随机分布
-        const centerMarginX = (100 - CENTER_AREA_WIDTH) / 2;
-        const centerMarginY = (100 - CENTER_AREA_HEIGHT) / 2;
-        
-        return {
-            x: centerMarginX + Math.random() * CENTER_AREA_WIDTH,
-            y: centerMarginY + Math.random() * CENTER_AREA_HEIGHT
-        };
-    } else {
-        // 全屏随机分布
-        return {
-            x: Math.random() * 90 + 5, // 5%-95%
-            y: Math.random() * 90 + 5
-        };
-    }
-}
-
-// 获取随机消息
-function getRandomMessage() {
-    return MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
-}
-
-// 创建弹窗元素
-function createPopup(index, totalCount) {
-    const popup = document.createElement('div');
-    popup.className = 'popup';
-    
-    // 最后一个弹窗使用独立的内容（初始显示第一个内容）
-    const isLastPopup = (index === totalCount - 1);
-    popup.textContent = isLastPopup ? LAST_POPUP_INITIAL_MESSAGE : getRandomMessage();
-
-    // 设置颜色
-    const color = generatePastelColor();
-    popup.style.backgroundColor = color;
-
-    // 设置位置
-    const position = generatePosition(index, totalCount);
-    popup.style.left = position.x + '%';
-    popup.style.top = position.y + '%';
-
-    // 判断是否为移动端
-    const isMobile = window.innerWidth <= 768;
-    const sizeScale = isMobile ? MOBILE_SCALE_RATIO : 1;
-    
-    // 应用自定义大小
-    if (isLastPopup) {
-        // 最后一个弹窗更大更醒目
-        popup.style.minWidth = (POPUP_MIN_WIDTH * 1.5 * sizeScale) + 'px';
-        popup.style.maxWidth = (POPUP_MAX_WIDTH * 1.5 * sizeScale) + 'px';
-        popup.style.padding = (POPUP_PADDING * 1.3 * sizeScale) + 'px ' + (POPUP_PADDING * 1.5 * sizeScale) + 'px';
-        popup.style.fontSize = (POPUP_FONT_SIZE * 1.3 * sizeScale) + 'px';
-        popup.style.fontWeight = '700';
-    } else {
-        popup.style.minWidth = (POPUP_MIN_WIDTH * sizeScale) + 'px';
-        popup.style.maxWidth = (POPUP_MAX_WIDTH * sizeScale) + 'px';
-        popup.style.padding = (POPUP_PADDING * sizeScale) + 'px ' + ((POPUP_PADDING + 4) * sizeScale) + 'px';
-        popup.style.fontSize = (POPUP_FONT_SIZE * sizeScale) + 'px';
-    }
-    
-    // 最后一个弹窗居中对齐
-    if (isLastPopup) {
-        popup.style.setProperty('transform', 'translate(-50%, -50%) scale(0.8)', 'important');
-        popup.classList.add('center-popup');
-    }
-
-    return popup;
-}
-
-// 弹窗动画（支持最后一个弹窗的独立动画时长）
-function animatePopup(popup, isLastPopup = false) {
-    const container = document.getElementById('popup-container');
-    container.appendChild(popup);
-
-    // 根据是否是最后一个弹窗选择不同的动画参数
-    const fadeIn = isLastPopup ? LAST_POPUP_FADE_IN : FADE_IN_DURATION;
-    const display = isLastPopup ? LAST_POPUP_DISPLAY : DISPLAY_DURATION;
-    const fadeOut = isLastPopup ? LAST_POPUP_FADE_OUT : FADE_OUT_DURATION;
-    
-    // 设置自定义动画时长
-    popup.style.transition = `opacity ${fadeIn}ms ease, transform ${fadeIn}ms ease`;
-
-    // 淡入
-    setTimeout(() => {
-        popup.classList.add('popup-fade-in');
-    }, 10);
-
-    // 淡出
-    setTimeout(() => {
-        popup.classList.remove('popup-fade-in');
-        popup.classList.add('popup-fade-out');
-        popup.style.transition = `opacity ${fadeOut}ms ease, transform ${fadeOut}ms ease`;
-
-        // 移除元素
-        setTimeout(() => {
-            if (popup.parentNode) {
-                popup.parentNode.removeChild(popup);
+        // 项目展开/收起
+        function expandProject(card) {
+            const details = card.querySelector('.project-details');
+            if (details) {
+                details.style.display = details.style.display === 'none' ? 'block' : 'none';
+                card.style.maxHeight = details.style.display === 'none' ? '' : '1000px';
             }
-        }, fadeOut);
-    }, fadeIn + display);
-}
-
-// 批量生成弹窗
-function generatePopups() {
-    const count = window.innerWidth <= 768 ? POPUP_COUNT * 0.6 : POPUP_COUNT;
-    
-    // 计算所有弹窗的总时长，用于让最后一个弹窗最后消失
-    let maxEndTime = 0;
-    const delayTimes = []; // 记录每个弹窗的延迟时间
-
-    // 先生成最后一个弹窗（第一个出现）
-    const lastPopup = createPopup(count - 1, count);
-    
-    // 生成其他弹窗，并记录延迟时间
-    for (let i = 0; i < count - 1; i++) {
-        const delay = i * BASE_DELAY + Math.random() * RANDOM_DELAY;
-        delayTimes.push(delay);
-        const endTime = delay + FADE_IN_DURATION + DISPLAY_DURATION + FADE_OUT_DURATION;
-        
-        if (endTime > maxEndTime) {
-            maxEndTime = endTime;
         }
-        
-        setTimeout(() => {
-            const popup = createPopup(i, count);
-            animatePopup(popup, false);
-        }, delay);
-    }
-    
-    // 计算剩余最后5个弹窗时的时间点（用于变化内容）
-    const last5Index = Math.max(0, count - 1 - 5); // 倒数第5个弹窗的索引
-    const changeContentTime = last5Index < delayTimes.length ? delayTimes[last5Index] : 0;
-    
-    // 调整最后一个弹窗的显示时长，确保它最后消失，并且至少多停留2秒
-    const adjustedLastDisplay = Math.max(
-        LAST_POPUP_DISPLAY,
-        maxEndTime - LAST_POPUP_FADE_IN - LAST_POPUP_FADE_OUT + 2000  // 额外增加2秒
-    );
-    
-    console.log(`最后一个弹窗总时长: ${adjustedLastDisplay}ms, 其他弹窗最大结束时间: ${maxEndTime}ms`);
-    
-    // 立即显示最后一个弹窗，但使用调整后的显示时长，并在剩余5个弹窗时变化内容
-    animatePopupWithCustomDuration(lastPopup, LAST_POPUP_FADE_IN, adjustedLastDisplay, LAST_POPUP_FADE_OUT, true, changeContentTime);
-}
 
-// 自定义动画时长的弹窗动画函数（支持内容变化）
-function animatePopupWithCustomDuration(popup, fadeIn, display, fadeOut, changeContent = false, changeTime = 0) {
-    const container = document.getElementById('popup-container');
-    container.appendChild(popup);
-    
-    // 设置自定义动画时长
-    popup.style.transition = `opacity ${fadeIn}ms ease, transform ${fadeIn}ms ease`;
+        // 滚动动画
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-    // 淡入
-    setTimeout(() => {
-        popup.classList.add('popup-fade-in');
-    }, 10);
-    
-    // 如果需要变化内容（最后一个弹窗）
-    if (changeContent) {
-        // 在剩余最后5个弹窗时变化内容
-        setTimeout(() => {
-            // 悄悄变化内容
-            popup.textContent = LAST_POPUP_FINAL_MESSAGE;
-        }, changeTime);
-    }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
 
-    // 淡出
-    setTimeout(() => {
-        popup.classList.remove('popup-fade-in');
-        popup.classList.add('popup-fade-out');
-        popup.style.transition = `opacity ${fadeOut}ms ease, transform ${fadeOut}ms ease`;
+        // 观察所有卡片
+        document.querySelectorAll('.blog-card, .timeline-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s ease-out';
+            observer.observe(el);
+        });
 
-        // 移除元素
-        setTimeout(() => {
-            if (popup.parentNode) {
-                popup.parentNode.removeChild(popup);
+        // 统计数字动画
+        function animateNumbers() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach(stat => {
+                const target = parseInt(stat.innerText);
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.innerText = target + (stat.innerText.includes('+') ? '+' : '');
+                        clearInterval(timer);
+                    } else {
+                        stat.innerText = Math.floor(current) + (stat.innerText.includes('+') ? '+' : '');
+                    }
+                }, 30);
+            });
+        }
+
+        // 页面加载完成后执行动画
+        window.addEventListener('load', () => {
+            setTimeout(animateNumbers, 500);
+        });
+
+        // 技能标签点击效果
+        document.querySelectorAll('.skill-tag').forEach(tag => {
+            tag.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // 添加导航栏阴影
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 10) {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            } else {
+                header.style.boxShadow = '';
             }
-        }, fadeOut);
-    }, fadeIn + display);
-}
+        });
 
-// 页面加载完成后启动
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('启动温馨弹窗系统...');
-    generatePopups();
+        // 打字效果
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
 
-    // 自动刷新（如果设置了间隔时间）
-    if (AUTO_REFRESH_INTERVAL > 0) {
-        setInterval(generatePopups, AUTO_REFRESH_INTERVAL);
-    }
-});
+        // 页面加载时应用打字效果
+        window.addEventListener('DOMContentLoaded', () => {
+            const heroTitle = document.querySelector('.hero-card h1');
+            if (heroTitle) {
+                const originalText = heroTitle.innerText;
+                typeWriter(heroTitle, originalText, 80);
+            }
+        });
     </script>
 </body>
 </html>
