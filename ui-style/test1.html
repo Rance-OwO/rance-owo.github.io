@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Equipment Data Monitoring Platform - Business Blue</title>
+    <title>Equipment Data Monitoring Platform - Minimalist</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --text-primary: #1e3a5f;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --input-border: #bae6fd;
-            --primary-color: #0ea5e9;
-            --primary-dark: #0284c7;
-            --card-bg: #f0f9ff;
-            --card-border: #e0f2fe;
-            --header-bg: #f1f5f9;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-card: #f5f5f5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: #e0e0e0;
+            --input-border: #e0e0e0;
+            --primary-color: #333333;
+            --primary-hover: #666666;
         }
 
         body {
@@ -28,62 +27,81 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .business-blue-header {
-            background: var(--header-bg);
+        /* 极简风格头部 */
+        .minimalist-header {
+            background: var(--bg-secondary);
             border-bottom: 1px solid var(--border-color);
         }
 
-        .business-blue-card {
-            background: var(--card-bg);
-            border-radius: 12px;
+        /* 极简风格卡片 */
+        .minimalist-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 20px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
 
-        .business-blue-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
+        .minimalist-card:hover {
+            border-color: var(--text-secondary);
         }
 
-        .business-blue-btn-primary {
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            color: #fff;
+        /* 极简风格按钮 */
+        .minimalist-btn-primary {
+            background: var(--primary-color);
+            color: #ffffff;
             border: none;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .minimalist-btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .minimalist-btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 4px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(14, 165, 233, 0.2);
         }
 
-        .business-blue-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(14, 165, 233, 0.3);
+        .minimalist-btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--text-secondary);
         }
 
-        .business-blue-input {
-            background: #fff;
+        /* 极简风格输入框 */
+        .minimalist-input {
+            background: var(--bg-primary);
             border: 1px solid var(--input-border);
             color: var(--text-primary);
             padding: 10px 15px;
-            border-radius: 8px;
+            border-radius: 4px;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: border-color 0.2s;
         }
 
-        .business-blue-input:focus {
+        .minimalist-input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
         }
 
+        .minimalist-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* 侧边栏样式 */
         .sidebar {
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             border-right: 1px solid var(--border-color);
-            transition: all 0.3s ease;
         }
 
         .sidebar-item {
@@ -91,38 +109,23 @@
         }
 
         .sidebar-item:hover {
-            background: var(--card-bg);
+            background: var(--bg-secondary);
         }
 
         .sidebar-item.active {
-            background: #e0f2fe;
+            background: var(--bg-card);
             color: var(--primary-color);
             font-weight: 500;
+            border-left: 3px solid var(--primary-color);
         }
 
+        /* 指标卡片 */
         .metric-card {
-            background: linear-gradient(135deg, #ffffff, #ffffff);
             position: relative;
             overflow: hidden;
         }
 
-        .metric-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), transparent);
-            border-radius: 50%;
-            transform: translate(30px, -30px);
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
+        /* 状态标签 */
         .status-online {
             color: #10b981;
             background: rgba(16, 185, 129, 0.1);
@@ -138,6 +141,37 @@
             background: rgba(245, 158, 11, 0.1);
         }
 
+        /* 表格样式 */
+        .minimalist-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .minimalist-table th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .minimalist-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .minimalist-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* 动画 */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -147,14 +181,13 @@
             animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
-        /* Logo style adjustments */
-        .logo-bg {
-            background: var(--primary-color);
+        /* 去除所有装饰性效果 */
+        .no-shadow {
+            box-shadow: none;
         }
 
-        /* Date picker styles */
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(0.5);
+        .no-gradient {
+            background: var(--bg-primary) !important;
         }
     </style>
 </head>
@@ -163,20 +196,20 @@
         <!-- Sidebar -->
         <aside class="sidebar w-64 flex flex-col">
             <!-- Logo area -->
-            <div class="flex items-center gap-3 p-6 border-b border-gray-200">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg logo-bg">
+            <div class="flex items-center gap-3 p-6 border-b" style="border-color: var(--border-color)">
+                <div class="flex h-10 w-10 items-center justify-center rounded" style="background: var(--text-primary)">
                     <i data-lucide="activity" class="h-5 w-5 text-white"></i>
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="text-lg font-semibold">Sanku</span>
-                    <span class="text-sm" style="color: var(--primary-color)">Monitoring Platform</span>
+                    <span class="text-sm" style="color: var(--text-secondary)">Monitoring Platform</span>
                 </div>
             </div>
 
             <!-- Navigation menu -->
             <nav class="flex-1 p-4 space-y-6">
                 <div>
-                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--primary-color)">Data Monitoring</div>
+                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--text-secondary)">Data Monitoring</div>
                     <div class="space-y-1">
                         <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm">
                             <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
@@ -198,7 +231,7 @@
                 </div>
 
                 <div>
-                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--primary-color)">System Management</div>
+                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--text-secondary)">System Management</div>
                     <div class="space-y-1">
                         <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm">
                             <i data-lucide="users" class="h-5 w-5"></i>
@@ -213,14 +246,14 @@
             </nav>
 
             <!-- User info -->
-            <div class="p-4 border-t border-gray-200">
+            <div class="p-4 border-t" style="border-color: var(--border-color)">
                 <div class="flex items-center gap-3">
-                    <div class="h-10 w-10 rounded-full flex items-center justify-center" style="background: #e0f2fe;">
-                        <i data-lucide="user" class="h-5 w-5" style="color: var(--primary-color)"></i>
+                    <div class="h-10 w-10 rounded-full flex items-center justify-center" style="background: var(--bg-card)">
+                        <i data-lucide="user" class="h-5 w-5" style="color: var(--text-secondary)"></i>
                     </div>
                     <div class="flex-1">
                         <div class="text-sm font-medium">Administrator</div>
-                        <div class="text-xs" style="color: var(--primary-color)">Online</div>
+                        <div class="text-xs" style="color: var(--text-secondary)">Online</div>
                     </div>
                 </div>
             </div>
@@ -229,18 +262,18 @@
         <!-- Main content area -->
         <main class="flex-1 flex flex-col overflow-hidden">
             <!-- Top bar -->
-            <header class="business-blue-header px-6 py-4 flex items-center justify-between">
+            <header class="minimalist-header px-6 py-4 flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-semibold">Equipment Data Overview</h1>
-                    <p class="text-sm mt-1" style="color: var(--primary-color)">Real-time monitoring of all equipment status</p>
+                    <p class="text-sm mt-1" style="color: var(--text-secondary)">Real-time monitoring of all equipment status</p>
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-2">
-                        <input type="date" class="business-blue-input" value="2025-12-25">
-                        <span class="text-sm" style="color: var(--primary-color)">to</span>
-                        <input type="date" class="business-blue-input" value="2025-12-25">
+                        <input type="date" class="minimalist-input" value="2025-12-25">
+                        <span class="text-sm" style="color: var(--text-secondary)">to</span>
+                        <input type="date" class="minimalist-input" value="2025-12-25">
                     </div>
-                    <button class="business-blue-btn-primary flex items-center gap-2">
+                    <button class="minimalist-btn-primary flex items-center gap-2">
                         <i data-lucide="download" class="h-4 w-4"></i>
                         Export Report
                     </button>
@@ -251,65 +284,65 @@
             <div class="flex-1 overflow-y-auto p-6 space-y-6">
                 <!-- Metric cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="business-blue-card metric-card">
+                    <div class="minimalist-card metric-card">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-sm" style="color: var(--primary-color)">Online Equipment</p>
+                                <p class="text-sm" style="color: var(--text-secondary)">Online Equipment</p>
                                 <p class="text-3xl font-semibold mt-2">42</p>
-                                <p class="text-sm mt-2 flex items-center gap-1 text-green-600">
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: #10b981">
                                     <i data-lucide="trending-up" class="h-4 w-4"></i>
                                     <span>+5.2%</span>
                                 </p>
                             </div>
-                            <div class="h-12 w-12 rounded-lg flex items-center justify-center" style="background: #e0f2fe;">
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--bg-primary)">
                                 <i data-lucide="cpu" class="h-6 w-6" style="color: var(--primary-color)"></i>
                             </div>
                         </div>
                     </div>
 
-                    <div class="business-blue-card metric-card">
+                    <div class="minimalist-card metric-card">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-sm" style="color: var(--primary-color)">Today's Production</p>
+                                <p class="text-sm" style="color: var(--text-secondary)">Today's Production</p>
                                 <p class="text-3xl font-semibold mt-2">8,542</p>
-                                <p class="text-sm mt-2 flex items-center gap-1 text-green-600">
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: #10b981">
                                     <i data-lucide="trending-up" class="h-4 w-4"></i>
                                     <span>+12.3%</span>
                                 </p>
                             </div>
-                            <div class="h-12 w-12 rounded-lg flex items-center justify-center" style="background: #e0f2fe;">
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--bg-primary)">
                                 <i data-lucide="package-2" class="h-6 w-6" style="color: var(--primary-color)"></i>
                             </div>
                         </div>
                     </div>
 
-                    <div class="business-blue-card metric-card">
+                    <div class="minimalist-card metric-card">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-sm" style="color: var(--primary-color)">Equipment Efficiency</p>
+                                <p class="text-sm" style="color: var(--text-secondary)">Equipment Efficiency</p>
                                 <p class="text-3xl font-semibold mt-2">94.7%</p>
-                                <p class="text-sm mt-2 flex items-center gap-1 text-red-600">
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: #ef4444">
                                     <i data-lucide="trending-down" class="h-4 w-4"></i>
                                     <span>-2.1%</span>
                                 </p>
                             </div>
-                            <div class="h-12 w-12 rounded-lg flex items-center justify-center" style="background: #e0f2fe;">
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--bg-primary)">
                                 <i data-lucide="gauge" class="h-6 w-6" style="color: var(--primary-color)"></i>
                             </div>
                         </div>
                     </div>
 
-                    <div class="business-blue-card metric-card">
+                    <div class="minimalist-card metric-card">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-sm" style="color: var(--primary-color)">Alert Count</p>
+                                <p class="text-sm" style="color: var(--text-secondary)">Alert Count</p>
                                 <p class="text-3xl font-semibold mt-2">7</p>
-                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--text-secondary)">
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--text-muted)">
                                     <i data-lucide="minus" class="h-4 w-4"></i>
                                     <span>Unchanged</span>
                                 </p>
                             </div>
-                            <div class="h-12 w-12 rounded-lg flex items-center justify-center" style="background: #e0f2fe;">
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--bg-primary)">
                                 <i data-lucide="alert-circle" class="h-6 w-6" style="color: var(--primary-color)"></i>
                             </div>
                         </div>
@@ -319,7 +352,7 @@
                 <!-- Chart area -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Production trend chart -->
-                    <div class="business-blue-card">
+                    <div class="minimalist-card">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-lg font-semibold">Production Trend</h2>
                             <div class="flex items-center gap-4 text-sm">
@@ -328,7 +361,7 @@
                                     <span>Actual Production</span>
                                 </div>
                                 <div class="flex items-center gap-2">
-                                    <div class="h-2 w-2 rounded-full" style="background: #bae6fd"></div>
+                                    <div class="h-2 w-2 rounded-full" style="background: var(--text-muted)"></div>
                                     <span>Planned Production</span>
                                 </div>
                             </div>
@@ -339,10 +372,10 @@
                     </div>
 
                     <!-- Equipment status pie chart -->
-                    <div class="business-blue-card">
+                    <div class="minimalist-card">
                         <div class="flex items-center justify-between mb-4">
                             <h2 class="text-lg font-semibold">Equipment Status Distribution</h2>
-                            <button class="text-sm hover:underline" style="color: var(--primary-color)">View Details</button>
+                            <button class="text-sm hover:underline" style="color: var(--text-secondary)">View Details</button>
                         </div>
                         <div class="chart-container">
                             <canvas id="statusChart"></canvas>
@@ -351,27 +384,27 @@
                 </div>
 
                 <!-- Equipment list -->
-                <div class="business-blue-card">
+                <div class="minimalist-card">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="text-lg font-semibold">Equipment Real-time Status</h2>
                         <div class="flex items-center gap-2">
-                            <input type="text" placeholder="Search equipment..." class="business-blue-input w-64">
-                            <button class="business-blue-btn-primary">
+                            <input type="text" placeholder="Search equipment..." class="minimalist-input w-64">
+                            <button class="minimalist-btn-primary">
                                 <i data-lucide="search" class="h-4 w-4"></i>
                             </button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
-                        <table class="w-full">
+                        <table class="minimalist-table">
                             <thead>
-                                <tr class="border-b" style="border-color: var(--border-color)">
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Equipment ID</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Equipment Name</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Status</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Production</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Efficiency</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Last Update</th>
-                                    <th class="text-left py-3 px-4 text-sm font-medium" style="color: var(--primary-color)">Actions</th>
+                                <tr>
+                                    <th class="text-sm font-medium">Equipment ID</th>
+                                    <th class="text-sm font-medium">Equipment Name</th>
+                                    <th class="text-sm font-medium">Status</th>
+                                    <th class="text-sm font-medium">Production</th>
+                                    <th class="text-sm font-medium">Efficiency</th>
+                                    <th class="text-sm font-medium">Last Update</th>
+                                    <th class="text-sm font-medium">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="deviceTableBody">
@@ -416,19 +449,19 @@
             const devices = generateMockData();
             
             tbody.innerHTML = devices.map(device => `
-                <tr class="border-b transition-colors" style="border-color: var(--border-color)" onmouseover="this.style.background='#f0f9ff'" onmouseout="this.style.background='transparent'">
-                    <td class="py-3 px-4 text-sm font-mono">${device.id}</td>
-                    <td class="py-3 px-4 text-sm">${device.name}</td>
-                    <td class="py-3 px-4">
+                <tr>
+                    <td class="text-sm font-mono">${device.id}</td>
+                    <td class="text-sm">${device.name}</td>
+                    <td>
                         <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium status-${device.status}">
                             <span class="w-2 h-2 rounded-full bg-current animate-pulse-slow"></span>
                             ${device.statusText}
                         </span>
                     </td>
-                    <td class="py-3 px-4 text-sm">${device.production.toLocaleString()}</td>
-                    <td class="py-3 px-4 text-sm">${device.efficiency}%</td>
-                    <td class="py-3 px-4 text-sm" style="color: var(--primary-color)">${device.lastUpdate}</td>
-                    <td class="py-3 px-4">
+                    <td class="text-sm">${device.production.toLocaleString()}</td>
+                    <td class="text-sm">${device.efficiency}%</td>
+                    <td class="text-sm" style="color: var(--text-secondary)">${device.lastUpdate}</td>
+                    <td>
                         <button class="text-sm hover:underline" style="color: var(--primary-color)">View Details</button>
                     </td>
                 </tr>
@@ -455,14 +488,14 @@
                     datasets: [{
                         label: 'Actual Production',
                         data: actualData,
-                        borderColor: '#0ea5e9',
-                        backgroundColor: 'rgba(14, 165, 233, 0.1)',
+                        borderColor: '#333333',
+                        backgroundColor: 'rgba(51, 51, 51, 0.1)',
                         tension: 0.3,
                         fill: true
                     }, {
                         label: 'Planned Production',
                         data: planData,
-                        borderColor: '#bae6fd',
+                        borderColor: '#999999',
                         borderDash: [5, 5],
                         tension: 0.3,
                         fill: false
@@ -480,7 +513,7 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(14, 165, 233, 0.1)'
+                                color: '#e0e0e0'
                             }
                         },
                         x: {

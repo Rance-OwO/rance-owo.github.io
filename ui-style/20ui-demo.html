@@ -3,7 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UI Style Selection (20 Styles) - AI Precision Customer Acquisition Assistant</title>
+    <title>UI Style Selection (16 Styles) - AI Precision Customer Acquisition Assistant</title>
+    
+    <!-- Development Status Macros -->
+    <script>
+        // Development status configuration
+        const DEV_STATUS = {
+            1: true,   // Minimal White - Completed
+            2: false,  // Dark Mode - In Development
+            3: true,   // Neumorphism - Completed (was 4)
+            4: false,  // Purple-Blue Gradient - In Development (was 5)
+            5: false,  // Cyberpunk - In Development (was 6)
+            6: false,  // Natural Green - In Development (was 7)
+            7: true,   // Business Blue - Completed (was 8)
+            8: true,   // Warm Orange - Completed (was 9)
+            9: false,  // Tech Purple - In Development (was 10)
+            10: true,  // Wireframe - Completed (was 12)
+            11: false, // Memphis - In Development (was 13)
+            12: false, // Luxury - In Development (was 14)
+            13: false, // Macaron - In Development (was 15)
+            14: true, // Industrial - Completed (was 16)
+            15: false, // Terracotta - In Development (was 17)
+            16: false, // Aurora - In Development (was 18)
+        };
+        
+        // Helper function to check if style is completed
+        function isStyleCompleted(styleNumber) {
+            return DEV_STATUS[styleNumber] || false;
+        }
+        
+        // Helper function to get demo file name
+        function getDemoFileName(styleNumber) {
+            const fileMap = {
+                1: 'test1.html',
+                3: 'test4.html',
+                5: 'text5.html',
+                7: 'test7.html',
+                8: 'test8.html',
+                10: 'test12.html',
+                14: 'text14.html'
+            };
+            return fileMap[styleNumber] || null;
+        }
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -178,6 +221,7 @@
             opacity: 0;
             transition: opacity 0.2s;
             pointer-events: none;
+            z-index: 10;
         }
 
         .style-card.clickable:hover::after {
@@ -203,15 +247,6 @@
         .style-2 .demo-btn-secondary { background: #333; color: #e0e0e0; }
         .style-2 .demo-input { background: #2d2d2d; border: 1px solid #404040; color: #e0e0e0; }
         .style-2 .demo-card { background: #292929; }
-
-        /* 3. Glassmorphism */
-        .style-3 { background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05)); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .style-3 .style-header { background: rgba(255,255,255,0.1); }
-        .style-3 .style-number { background: rgba(255,255,255,0.2); }
-        .style-3 .demo-btn-primary { background: rgba(99,102,241,0.8); color: #fff; }
-        .style-3 .demo-btn-secondary { background: rgba(255,255,255,0.15); color: #fff; }
-        .style-3 .demo-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-        .style-3 .demo-card { background: rgba(255,255,255,0.08); }
 
         /* 4. Neumorphism */
         .style-4 { background: #e0e5ec; color: #444; }
@@ -278,16 +313,6 @@
 
         /* ========== 11-20 New Styles ========== */
 
-        /* 11. Retro Pixel */
-        .style-11 { background: #fff; color: #000; border: 4px solid #000; font-family: 'Courier New', monospace; box-shadow: 8px 8px 0 #000; border-radius: 0; }
-        .style-11 .style-header { background: #ffeb3b; border-bottom: 4px solid #000; }
-        .style-11 .style-number { background: #000; color: #fff; border-radius: 0; }
-        .style-11 .demo-btn, .style-11 .demo-input, .style-11 .demo-card { border-radius: 0; }
-        .style-11 .demo-btn-primary { background: #ff0055; color: #fff; border: 2px solid #000; box-shadow: 2px 2px 0 #000; }
-        .style-11 .demo-btn-secondary { background: #00e5ff; color: #000; border: 2px solid #000; box-shadow: 2px 2px 0 #000; }
-        .style-11 .demo-input { border: 2px solid #000; background: #fff; color: #000; }
-        .style-11 .demo-card { border: 2px solid #000; background: #eeeeee; }
-
         /* 12. Wireframe */
         .style-12 { background: #fff; color: #000; border: 1px solid #000; border-radius: 0; }
         .style-12 .style-header { border-bottom: 1px solid #000; background: #fff; }
@@ -353,87 +378,40 @@
         .style-18 .demo-input { background: rgba(15, 23, 42, 0.5); border: 1px solid rgba(56, 189, 248, 0.3); color: #fff; }
         .style-18 .demo-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); }
 
-        /* 19. Editorial */
-        .style-19 { background: #f9f7f1; color: #1c1917; font-family: 'Georgia', 'Times New Roman', serif; border: 1px solid #e7e5e4; }
-        .style-19 .style-header { border-bottom: 3px double #1c1917; background: #f9f7f1; font-style: italic; }
-        .style-19 .style-number { background: #1c1917; color: #f9f7f1; font-family: sans-serif; }
-        .style-19 .demo-btn-primary { background: #1c1917; color: #fff; border-radius: 0; font-family: sans-serif; letter-spacing: 1px; }
-        .style-19 .demo-btn-secondary { background: transparent; color: #1c1917; border: 1px solid #1c1917; border-radius: 0; font-family: sans-serif; }
-        .style-19 .demo-input { background: #fff; border: 1px solid #1c1917; border-radius: 0; color: #1c1917; }
-        .style-19 .demo-card { background: #fff; border: 1px solid #e7e5e4; padding: 20px; }
-        
-        /* 20. Frosted Acrylic */
-        .style-20 { background: rgba(255, 255, 255, 0.85); color: #333; backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
-        .style-20 .style-header { background: rgba(255, 255, 255, 0.5); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .style-20 .style-number { background: rgba(0,0,0,0.8); color: #fff; }
-        .style-20 .demo-btn-primary { background: #333; color: #fff; opacity: 0.9; }
-        .style-20 .demo-btn-secondary { background: rgba(255,255,255,0.8); color: #333; border: 1px solid rgba(0,0,0,0.1); }
-        .style-20 .demo-input { background: rgba(255,255,255,0.6); border: 1px solid rgba(0,0,0,0.1); color: #333; }
-        .style-20 .demo-card { background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,1); }
 
     </style>
 </head>
 <body>
-    <h1>🎨 UI Style Selection (20 Styles)</h1>
+    <h1>🎨 UI Style Selection (16 Styles)</h1>
     <p class="subtitle">Please browse and select your preferred style, which will serve as the theme foundation for the application</p>
     
     <div class="grid">
         <!-- 1-10 Original Styles -->
-        <div class="style-card style-1 clickable" onclick="window.location.href='test-white.html'"><div class="style-header"><span>1. Minimal White</span><span class="style-number">1</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Classic and clear, information-focused</p></div><div class="color-palette"><span class="color-dot" style="background:#333"></span><span class="color-dot" style="background:#fff"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
+        <div class="style-card style-1 clickable" onclick="window.location.href='test1.html'"><div class="style-header"><span>1. Minimal White</span><span class="style-number">1</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Classic and clear, information-focused</p></div><div class="color-palette"><span class="color-dot" style="background:#333"></span><span class="color-dot" style="background:#fff"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
         
         <div class="style-card style-2"><div class="style-header"><span>2. Dark Mode</span><span class="style-number">2</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Deep and eye-friendly, geek's choice</p></div><div class="color-palette"><span class="color-dot" style="background:#1e1e1e"></span><span class="color-dot" style="background:#3b82f6"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
         
-        <div class="style-card style-3"><div class="style-header"><span>3. Glassmorphism</span><span class="style-number">3</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Transparent and hazy, modern texture</p></div><div class="color-palette"><span class="color-dot" style="background:rgba(255,255,255,0.2)"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
+        <div class="style-card style-4 clickable" onclick="window.open('test4.html', '_self')"><div class="style-header"><span>3. Neumorphism</span><span class="style-number">3</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Soft and 3D, realistic touch</p></div><div class="color-palette"><span class="color-dot" style="background:#e0e5ec"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
         
-        <div class="style-card style-4 clickable" onclick="window.location.href='test4.html'"><div class="style-header"><span>4. Neumorphism</span><span class="style-number">4</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Soft and 3D, realistic touch</p></div><div class="color-palette"><span class="color-dot" style="background:#e0e5ec"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
+        <div class="style-card style-5"><div class="style-header"><span>4. Purple-Blue Gradient</span><span class="style-number">4</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Vibrant colors, youthful energy</p></div><div class="color-palette"><span class="color-dot" style="background:#764ba2"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
         
-        <div class="style-card style-5"><div class="style-header"><span>5. Purple-Blue Gradient</span><span class="style-number">5</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Vibrant colors, youthful energy</p></div><div class="color-palette"><span class="color-dot" style="background:#764ba2"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
+        <div class="style-card style-6"><div class="style-header"><span>5. Cyberpunk</span><span class="style-number">5</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Neon glitch, futuristic sci-fi</p></div><div class="color-palette"><span class="color-dot" style="background:#00fff5"></span><span class="color-dot" style="background:#ff0080"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
         
-        <div class="style-card style-6"><div class="style-header"><span>6. Cyberpunk</span><span class="style-number">6</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Neon glitch, futuristic sci-fi</p></div><div class="color-palette"><span class="color-dot" style="background:#00fff5"></span><span class="color-dot" style="background:#ff0080"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
+        <div class="style-card style-7"><div class="style-header"><span>6. Natural Green</span><span class="style-number">6</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Fresh and healing, forest style</p></div><div class="color-palette"><span class="color-dot" style="background:#22c55e"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
         
-        <div class="style-card style-7"><div class="style-header"><span>7. Natural Green</span><span class="style-number">7</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Fresh and healing, forest style</p></div><div class="color-palette"><span class="color-dot" style="background:#22c55e"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
+        <div class="style-card style-8 clickable" onclick="window.open('test7.html', '_self')"><div class="style-header"><span>7. Business Blue</span><span class="style-number">7</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Stable and reliable, enterprise choice</p></div><div class="color-palette"><span class="color-dot" style="background:#0ea5e9"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
         
-        <div class="style-card style-8 clickable" onclick="window.location.href='test-blue.html'"><div class="style-header"><span>8. Business Blue</span><span class="style-number">8</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Stable and reliable, enterprise choice</p></div><div class="color-palette"><span class="color-dot" style="background:#0ea5e9"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
+        <div class="style-card style-9 clickable" onclick="window.open('test8.html', '_self')"><div class="style-header"><span>8. Warm Orange</span><span class="style-number">8</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Warm and friendly, service-oriented</p></div><div class="color-palette"><span class="color-dot" style="background:#f97316"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
         
-        <div class="style-card style-9 clickable" onclick="window.location.href='test-orange.html'"><div class="style-header"><span>9. Warm Orange</span><span class="style-number">9</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Warm and friendly, service-oriented</p></div><div class="color-palette"><span class="color-dot" style="background:#f97316"></span></div><button class="demo-button available">View Full Demo →</button></div></div>
-        
-        <div class="style-card style-10"><div class="style-header"><span>10. Tech Purple</span><span class="style-number">10</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Mysterious and premium, AI exclusive</p></div><div class="color-palette"><span class="color-dot" style="background:#8b5cf6"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
+        <div class="style-card style-10"><div class="style-header"><span>9. Tech Purple</span><span class="style-number">9</span></div><div class="style-content"><div class="demo-row"><button class="demo-btn demo-btn-primary">Confirm</button><button class="demo-btn demo-btn-secondary">Cancel</button></div><div class="demo-row"><input class="demo-input" placeholder="Enter..."></div><div class="demo-card"><h4>Profile Card</h4><p>Mysterious and premium, AI exclusive</p></div><div class="color-palette"><span class="color-dot" style="background:#8b5cf6"></span></div><button class="demo-button developing" disabled>In Development...</button></div></div>
 
         <!-- 11-20 New Styles -->
         
-        <!-- 11. Retro Pixel -->
-        <div class="style-card style-11">
+        <!-- 10. Wireframe -->
+        <div class="style-card style-12 clickable" onclick="window.location.href='test12.html'">
             <div class="style-header">
-                <span>11. Retro Pixel</span>
-                <span class="style-number">11</span>
-            </div>
-            <div class="style-content">
-                <div class="demo-row">
-                    <button class="demo-btn demo-btn-primary">START</button>
-                    <button class="demo-btn demo-btn-secondary">RESET</button>
-                </div>
-                <div class="demo-row">
-                    <input class="demo-input" placeholder="INSERT COIN...">
-                </div>
-                <div class="demo-card">
-                    <h4>PLAYER 1</h4>
-                    <p>8-BIT retro game style</p>
-                </div>
-                <div class="color-palette">
-                    <span class="color-dot" style="background:#ff0055"></span>
-                    <span class="color-dot" style="background:#00e5ff"></span>
-                    <span class="color-dot" style="background:#ffeb3b"></span>
-                    <span class="color-dot" style="background:#000"></span>
-                </div>
-                <button class="demo-button developing" disabled>In Development...</button>
-            </div>
-        </div>
-
-        <!-- 12. Wireframe -->
-        <div class="style-card style-12">
-            <div class="style-header">
-                <span>12. Wireframe</span>
-                <span class="style-number">12</span>
+                <span>10. Wireframe</span>
+                <span class="style-number">10</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -451,15 +429,15 @@
                     <span class="color-dot" style="background:#fff"></span>
                     <span class="color-dot" style="background:#000"></span>
                 </div>
-                <button class="demo-button developing" disabled>In Development...</button>
+                <button class="demo-button available">View Full Demo →</button>
             </div>
         </div>
 
-        <!-- 13. Memphis -->
+        <!-- 11. Memphis -->
         <div class="style-card style-13">
             <div class="style-header">
-                <span>13. Memphis</span>
-                <span class="style-number">13</span>
+                <span>11. Memphis</span>
+                <span class="style-number">11</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -483,11 +461,11 @@
             </div>
         </div>
 
-        <!-- 14. Luxury -->
+        <!-- 12. Luxury -->
         <div class="style-card style-14">
             <div class="style-header">
-                <span>14. Luxury</span>
-                <span class="style-number">14</span>
+                <span>12. Luxury</span>
+                <span class="style-number">12</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -509,11 +487,11 @@
             </div>
         </div>
 
-        <!-- 15. Macaron -->
+        <!-- 13. Macaron -->
         <div class="style-card style-15">
             <div class="style-header">
-                <span>15. Macaron</span>
-                <span class="style-number">15</span>
+                <span>13. Macaron</span>
+                <span class="style-number">13</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -536,11 +514,11 @@
             </div>
         </div>
 
-        <!-- 16. Industrial -->
-        <div class="style-card style-16">
+        <!-- 14. Industrial -->
+        <div class="style-card style-16 clickable" onclick="window.open('text14.html', '_self')">
             <div class="style-header">
-                <span>16. Industrial</span>
-                <span class="style-number">16</span>
+                <span>14. Industrial</span>
+                <span class="style-number">14</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -559,15 +537,15 @@
                     <span class="color-dot" style="background:#f59e0b"></span>
                     <span class="color-dot" style="background:#9ca3af"></span>
                 </div>
-                <button class="demo-button developing" disabled>In Development...</button>
+                <button class="demo-button available">View Full Demo →</button>
             </div>
         </div>
 
-        <!-- 17. Terracotta -->
+        <!-- 15. Terracotta -->
         <div class="style-card style-17">
             <div class="style-header">
-                <span>17. Terracotta</span>
-                <span class="style-number">17</span>
+                <span>15. Terracotta</span>
+                <span class="style-number">15</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -589,11 +567,11 @@
             </div>
         </div>
 
-        <!-- 18. Aurora -->
-        <div class="style-card style-18">
+        <!-- 16. Aurora -->
+        <div class="style-card style-18 clickable" onclick="window.open('text16.html', '_self')">
             <div class="style-header">
-                <span>18. Aurora</span>
-                <span class="style-number">18</span>
+                <span>16. Aurora</span>
+                <span class="style-number">16</span>
             </div>
             <div class="style-content">
                 <div class="demo-row">
@@ -612,66 +590,15 @@
                     <span class="color-dot" style="background:#38bdf8"></span>
                     <span class="color-dot" style="background:#a855f7"></span>
                 </div>
-                <button class="demo-button developing" disabled>In Development...</button>
+                <button class="demo-button available">View Full Demo →</button>
             </div>
         </div>
 
-        <!-- 19. Editorial -->
-        <div class="style-card style-19">
-            <div class="style-header">
-                <span>19. Editorial</span>
-                <span class="style-number">19</span>
-            </div>
-            <div class="style-content">
-                <div class="demo-row">
-                    <button class="demo-btn demo-btn-primary">Read More</button>
-                    <button class="demo-btn demo-btn-secondary">Index</button>
-                </div>
-                <div class="demo-row">
-                    <input class="demo-input" placeholder="Query...">
-                </div>
-                <div class="demo-card">
-                    <h4>The Daily</h4>
-                    <p>Serif font, paper reading feel</p>
-                </div>
-                <div class="color-palette">
-                    <span class="color-dot" style="background:#f9f7f1"></span>
-                    <span class="color-dot" style="background:#1c1917"></span>
-                </div>
-                <button class="demo-button developing" disabled>In Development...</button>
-            </div>
-        </div>
-
-        <!-- 20. Acrylic -->
-        <div class="style-card style-20">
-            <div class="style-header">
-                <span>20. Acrylic</span>
-                <span class="style-number">20</span>
-            </div>
-            <div class="style-content">
-                <div class="demo-row">
-                    <button class="demo-btn demo-btn-primary">Action</button>
-                    <button class="demo-btn demo-btn-secondary">Skip</button>
-                </div>
-                <div class="demo-row">
-                    <input class="demo-input" placeholder="Type...">
-                </div>
-                <div class="demo-card">
-                    <h4>Frosted</h4>
-                    <p>Thick frosted, light diffusion</p>
-                </div>
-                <div class="color-palette">
-                    <span class="color-dot" style="background:rgba(255,255,255,0.8)"></span>
-                    <span class="color-dot" style="background:#333"></span>
-                </div>
-                <button class="demo-button developing" disabled>In Development...</button>
-            </div>
-        </div>
 
     </div>
 
     <div style="text-align: center; margin-top: 50px; color: #666; padding-bottom: 50px;">
-        <p>Please tell me your selected style number (1-20), future development will use this style consistently</p>
+        <p>Please tell me your selected style number (1-16), future development will use this style consistently</p>
     </div>
 </body>
 </html>

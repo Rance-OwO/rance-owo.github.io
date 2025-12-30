@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Data Monitoring Platform - Aurora</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: rgba(30, 41, 59, 0.4);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --input-border: rgba(56, 189, 248, 0.3);
+            --primary-color: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --secondary-color: #a855f7;
+            --accent-color: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Aurora background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+            animation: auroraShift 20s ease-in-out infinite;
+        }
+
+        @keyframes auroraShift {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(120deg) scale(1.1); }
+            66% { transform: rotate(240deg) scale(0.9); }
+        }
+
+        /* Aurora style header */
+        .aurora-header {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Aurora style card */
+        .aurora-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .aurora-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .aurora-card:hover {
+            border-color: rgba(56, 189, 248, 0.3);
+            box-shadow: 0 8px 32px rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .aurora-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Aurora style button */
+        .aurora-btn-primary {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .aurora-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .aurora-btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .aurora-btn-primary:hover {
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .aurora-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .aurora-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+
+        /* Aurora style input */
+        .aurora-input {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--input-border);
+            color: var(--text-primary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .aurora-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .aurora-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 0;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            transition: height 0.3s ease;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(56, 189, 248, 0.1);
+        }
+
+        .sidebar-item:hover::before {
+            height: 70%;
+        }
+
+        .sidebar-item.active {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--primary-color);
+        }
+
+        .sidebar-item.active::before {
+            height: 70%;
+        }
+
+        /* Metric cards */
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .metric-card:hover::after {
+            opacity: 1;
+        }
+
+        /* Status labels */
+        .status-online {
+            color: var(--accent-color);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-offline {
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-warning {
+            color: var(--primary-color);
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Table */
+        .aurora-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .aurora-table th {
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--primary-color);
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .aurora-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+        }
+
+        .aurora-table tr:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        /* Animations */
+        @keyframes pulse-aurora {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-pulse-aurora {
+            animation: pulse-aurora 3s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glow effects */
+        .glow-primary {
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .glow-secondary {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            margin: 5% auto;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, var(--primary-hover), var(--secondary-color));
+        }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 flex flex-col">
+            <!-- Logo area -->
+            <div class="flex items-center gap-3 p-6 border-b" style="border-color: rgba(255, 255, 255, 0.1)">
+                <div class="flex h-10 w-10 items-center justify-center rounded-full glow-primary animate-pulse-aurora">
+                    <i data-lucide="sparkles" class="h-5 w-5 text-white"></i>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-bold">SANKU</span>
+                    <span class="text-xs" style="color: var(--primary-color)">AURORA v3.0</span>
+                </div>
+            </div>
+
+            <!-- Navigation menu -->
+            <nav class="flex-1 p-4 space-y-6">
+                <div>
+                    <div class="px-3 text-xs font-bold mb-2 uppercase tracking-wider" style="color: var(--text-secondary)">[ Data Flow ]</div>
+                    <div class="space-y-1">
+                        <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+                            <span>Equipment Overview</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="package" class="h-4 w-4"></i>
+                            <span>Equipment Management</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="trending-up" class="h-4 w-4"></i>
+                            <span>Data Analysis</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="zap" class="h-4 w-4"></i>
+                            <span>Alert Center</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="px-3 text-xs font-bold mb-2 uppercase tracking-wider" style="color: var(--text-secondary)">[ System Control ]</div>
+                    <div class="space-y-1">
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="users" class="h-4 w-4"></i>
+                            <span>User Management</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="settings" class="h-4 w-4"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- User info -->
+            <div class="p-4 border-t" style="border-color: rgba(255, 255, 255, 0.1)">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded-full flex items-center justify-center glow-secondary">
+                        <i data-lucide="user" class="h-4 w-4 text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-bold">ADMIN</div>
+                        <div class="text-xs uppercase animate-pulse-aurora" style="color: var(--accent-color)">● ONLINE</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <header class="aurora-header px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold">Equipment Data Overview</h1>
+                    <p class="text-sm mt-1 opacity-80">[ Aurora Monitoring System ]</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <input type="date" class="aurora-input" value="2025-12-25" style="width: 140px">
+                        <span class="text-sm">TO</span>
+                        <input type="date" class="aurora-input" value="2025-12-25" style="width: 140px">
+                    </div>
+                    <button class="aurora-btn-primary flex items-center gap-2">
+                        <i data-lucide="download" class="h-4 w-4"></i>
+                        Export Report
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content area -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Metric cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="aurora-card metric-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary)">Active Equipment</p>
+                                <p class="metric-value">42</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--accent-color)">
+                                    <i data-lucide="trending-up" class="h-3 w-3"></i>
+                                    <span>+5.2%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center glow-primary animate-float">
+                                <i data-lucide="cpu" class="h-6 w-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aurora-card metric-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary)">Today's Production</p>
+                                <p class="metric-value">8,542</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--accent-color)">
+                                    <i data-lucide="trending-up" class="h-3 w-3"></i>
+                                    <span>+12.3%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center glow-secondary animate-float" style="animation-delay: 1s">
+                                <i data-lucide="package-2" class="h-6 w-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aurora-card metric-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary)">System Efficiency</p>
+                                <p class="metric-value">94.7%</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: #ef4444">
+                                    <i data-lucide="trending-down" class="h-3 w-3"></i>
+                                    <span>-2.1%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); animation: float 6s ease-in-out infinite; animation-delay: 2s">
+                                <i data-lucide="gauge" class="h-6 w-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aurora-card metric-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-bold uppercase tracking-wider" style="color: var(--text-secondary)">Active Alerts</p>
+                                <p class="metric-value">7</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--text-muted)">
+                                    <i data-lucide="activity" class="h-3 w-3"></i>
+                                    <span>MONITORING</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded-full flex items-center justify-center animate-pulse-aurora" style="background: linear-gradient(135deg, #ef4444, #f97316)">
+                                <i data-lucide="alert-circle" class="h-6 w-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart area -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Production trend chart -->
+                    <div class="aurora-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold">Production Flow</h2>
+                            <div class="flex items-center gap-4 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 rounded-full glow-primary"></div>
+                                    <span>Actual</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 rounded-full" style="background: var(--text-muted)"></div>
+                                    <span>Planned</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="productionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Equipment status pie chart -->
+                    <div class="aurora-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold">Status Distribution</h2>
+                            <button class="text-sm hover:underline" style="color: var(--primary-color)">View Details</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment list -->
+                <div class="aurora-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold">Equipment Real-time Status</h2>
+                        <div class="flex items-center gap-2">
+                            <input type="text" placeholder="Search equipment..." class="aurora-input w-64" id="searchInput">
+                            <button class="aurora-btn-primary" onclick="searchEquipment()">
+                                <i data-lucide="search" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="aurora-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-xs font-bold">Equipment ID</th>
+                                    <th class="text-xs font-bold">Equipment Name</th>
+                                    <th class="text-xs font-bold">Status</th>
+                                    <th class="text-xs font-bold">Production</th>
+                                    <th class="text-xs font-bold">Efficiency</th>
+                                    <th class="text-xs font-bold">Last Update</th>
+                                    <th class="text-xs font-bold">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deviceTableBody">
+                                <!-- Dynamically generated equipment data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold">Equipment Details</h3>
+                <button class="aurora-btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+            <div id="modalContent">
+                <!-- Modal content will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Generate mock data
+        function generateMockData() {
+            const devices = [];
+            const deviceTypes = ['Production Unit', 'Assembly Line', 'Packaging Machine', 'Quality Control', 'Storage System'];
+            const statuses = ['online', 'offline', 'warning'];
+            
+            for (let i = 1; i <= 12; i++) {
+                const status = statuses[Math.floor(Math.random() * statuses.length)];
+                const statusText = status.toUpperCase();
+                const production = Math.floor(Math.random() * 1000) + 500;
+                const efficiency = (Math.random() * 20 + 80).toFixed(1);
+                const type = deviceTypes[Math.floor(Math.random() * deviceTypes.length)];
+                
+                devices.push({
+                    id: `AUR${String(i).padStart(3, '0')}`,
+                    name: `${type} ${i}`,
+                    type: type,
+                    status: status,
+                    statusText: statusText,
+                    production: production,
+                    efficiency: efficiency,
+                    lastUpdate: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString(),
+                    temperature: (Math.random() * 30 + 40).toFixed(1),
+                    power: (Math.random() * 50 + 100).toFixed(1),
+                    uptime: (Math.random() * 24 + 72).toFixed(1)
+                });
+            }
+            return devices;
+        }
+
+        // Render device table
+        function renderDeviceTable() {
+            const tbody = document.getElementById('deviceTableBody');
+            const devices = generateMockData();
+            
+            tbody.innerHTML = devices.map(device => `
+                <tr>
+                    <td class="font-mono text-sm" style="color: var(--primary-color)">${device.id}</td>
+                    <td class="text-sm">${device.name}</td>
+                    <td>
+                        <span class="status-${device.status} animate-pulse-aurora">
+                            ${device.statusText}
+                        </span>
+                    </td>
+                    <td class="font-mono text-sm">${device.production.toLocaleString()}</td>
+                    <td class="font-mono text-sm">${device.efficiency}%</td>
+                    <td class="font-mono text-sm" style="color: var(--text-secondary)">${device.lastUpdate}</td>
+                    <td>
+                        <button class="text-sm hover:underline" style="color: var(--primary-color)" onclick="showDetails('${device.id}')">View Details</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Store devices for later use
+            window.currentDevices = devices;
+        }
+
+        // Search equipment
+        function searchEquipment() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#deviceTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        // Show equipment details
+        function showDetails(deviceId) {
+            const device = window.currentDevices.find(d => d.id === deviceId);
+            if (!device) return;
+            
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="aurora-card p-4">
+                            <div class="text-sm text-gray-400 mb-1">Device ID</div>
+                            <div class="font-mono text-lg" style="color: var(--primary-color)">${device.id}</div>
+                        </div>
+                        <div class="aurora-card p-4">
+                            <div class="text-sm text-gray-400 mb-1">Device Name</div>
+                            <div class="text-lg">${device.name}</div>
+                        </div>
+                        <div class="aurora-card p-4">
+                            <div class="text-sm text-gray-400 mb-1">Type</div>
+                            <div class="text-lg">${device.type}</div>
+                        </div>
+                        <div class="aurora-card p-4">
+                            <div class="text-sm text-gray-400 mb-1">Status</div>
+                            <span class="status-${device.status}">${device.statusText}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="aurora-card text-center p-4">
+                            <div class="text-2xl font-bold" style="color: var(--primary-color)">${device.production.toLocaleString()}</div>
+                            <div class="text-xs text-gray-400 mt-1">Production</div>
+                        </div>
+                        <div class="aurora-card text-center p-4">
+                            <div class="text-2xl font-bold" style="color: var(--secondary-color)">${device.efficiency}%</div>
+                            <div class="text-xs text-gray-400 mt-1">Efficiency</div>
+                        </div>
+                        <div class="aurora-card text-center p-4">
+                            <div class="text-2xl font-bold" style="color: #f97316">${device.temperature}°C</div>
+                            <div class="text-xs text-gray-400 mt-1">Temperature</div>
+                        </div>
+                        <div class="aurora-card text-center p-4">
+                            <div class="text-2xl font-bold" style="color: var(--accent-color)">${device.uptime}h</div>
+                            <div class="text-xs text-gray-400 mt-1">Uptime</div>
+                        </div>
+                    </div>
+                    
+                    <div class="aurora-card p-4">
+                        <h4 class="font-bold mb-3">Performance Metrics</h4>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Power Consumption</span>
+                                <span class="font-mono text-sm">${device.power} kW</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Last Maintenance</span>
+                                <span class="font-mono text-sm">${new Date(Date.now() - Math.random() * 7 * 24 * 3600000).toLocaleDateString()}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm">Next Scheduled Check</span>
+                                <span class="font-mono text-sm">${new Date(Date.now() + Math.random() * 7 * 24 * 3600000).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end gap-2">
+                        <button class="aurora-btn-primary" onclick="restartDevice('${device.id}')">Restart Device</button>
+                        <button class="aurora-btn-secondary" onclick="closeModal()">Close</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('detailModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function restartDevice(deviceId) {
+            alert(`Restart command sent to ${deviceId}. System will reboot in 10 seconds.`);
+            closeModal();
+        }
+
+        // Initialize production trend chart
+        function initProductionChart() {
+            const ctx = document.getElementById('productionChart').getContext('2d');
+            const hours = [];
+            const actualData = [];
+            const planData = [];
+            
+            for (let i = 0; i < 24; i++) {
+                hours.push(`${i}:00`);
+                actualData.push(Math.floor(Math.random() * 500) + 300);
+                planData.push(450);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Actual Production',
+                        data: actualData,
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2
+                    }, {
+                        label: 'Planned Production',
+                        data: planData,
+                        borderColor: '#64748b',
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        fill: false,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize equipment status pie chart
+        function initStatusChart() {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ONLINE', 'OFFLINE', 'MAINTENANCE', 'WARNING'],
+                    datasets: [{
+                        data: [42, 5, 2, 1],
+                        backgroundColor: [
+                            '#10b981',
+                            '#ef4444',
+                            '#f59e0b',
+                            '#38bdf8'
+                        ],
+                        borderWidth: 2,
+                        borderColor: 'rgba(15, 23, 42, 0.8)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#e2e8f0'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDeviceTable();
+            initProductionChart();
+            initStatusChart();
+            
+            // Add search functionality
+            document.getElementById('searchInput').addEventListener('input', searchEquipment);
+            
+            // Simulate real-time data updates
+            setInterval(() => {
+                renderDeviceTable();
+            }, 30000);
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>

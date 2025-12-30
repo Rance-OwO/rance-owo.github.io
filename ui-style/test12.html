@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Data Monitoring Platform - Wireframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-card: #fafafa;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --text-muted: #666666;
+            --border-color: #000000;
+            --border-secondary: #333333;
+            --border-dashed: #666666;
+            --primary-color: #000000;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Wireframe base styles */
+        .wireframe-border {
+            border: 1px solid var(--border-color);
+        }
+
+        .wireframe-border-thick {
+            border: 2px solid var(--border-color);
+        }
+
+        .wireframe-border-dashed {
+            border: 1px dashed var(--border-dashed);
+        }
+
+        .wireframe-border-bottom {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .wireframe-border-right {
+            border-right: 1px solid var(--border-color);
+        }
+
+        /* Header */
+        .wireframe-header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Cards */
+        .wireframe-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .wireframe-card:hover {
+            border-color: var(--border-secondary);
+            box-shadow: 2px 2px 0 var(--border-secondary);
+        }
+
+        /* Buttons */
+        .wireframe-btn-primary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-bottom: 3px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 0;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wireframe-btn-primary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-secondary);
+            border-bottom-color: var(--border-secondary);
+        }
+
+        .wireframe-btn-secondary {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 0;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wireframe-btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--border-secondary);
+        }
+
+        /* Input fields */
+        .wireframe-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-bottom: 3px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 15px;
+            border-radius: 0;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .wireframe-input:focus {
+            outline: none;
+            border-color: var(--border-secondary);
+            border-bottom-color: var(--border-secondary);
+        }
+
+        .wireframe-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Sidebar */
+        .wireframe-sidebar {
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .wireframe-sidebar-item {
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .wireframe-sidebar-item:hover {
+            background: var(--bg-secondary);
+            border-left-color: var(--border-secondary);
+        }
+
+        .wireframe-sidebar-item.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-weight: 500;
+            border-left: 3px solid var(--text-primary);
+        }
+
+        /* Status indicators with minimal color */
+        .status-online {
+            color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success-color);
+        }
+
+        .status-offline {
+            color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error-color);
+        }
+
+        .status-warning {
+            color: var(--warning-color);
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning-color);
+        }
+
+        /* Table */
+        .wireframe-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .wireframe-table th {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .wireframe-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .wireframe-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            border: 1px dashed var(--border-dashed);
+            padding: 10px;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Blueprint grid pattern */
+        .blueprint-bg {
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Interactive elements */
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .interactive-element:hover {
+            background: var(--bg-secondary);
+            box-shadow: 1px 1px 0 var(--border-secondary);
+        }
+
+        /* Metric cards with blueprint style */
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--border-color),
+                var(--border-color) 5px,
+                transparent 5px,
+                transparent 10px
+            );
+        }
+    </style>
+</head>
+<body class="blueprint-bg">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="wireframe-sidebar w-64 flex flex-col">
+            <!-- Logo area -->
+            <div class="flex items-center gap-3 p-6 wireframe-border-bottom">
+                <div class="flex h-10 w-10 items-center justify-center wireframe-border">
+                    <i data-lucide="activity" class="h-5 w-5"></i>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-semibold">Sanku</span>
+                    <span class="text-sm" style="color: var(--text-secondary)">Wireframe</span>
+                </div>
+            </div>
+
+            <!-- Navigation menu -->
+            <nav class="flex-1 p-4 space-y-6">
+                <div>
+                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--text-secondary)">DATA MONITORING</div>
+                    <div class="space-y-1">
+                        <a href="#" class="wireframe-sidebar-item active flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="layout-dashboard" class="h-5 w-5"></i>
+                            <span>Equipment Overview</span>
+                        </a>
+                        <a href="#" class="wireframe-sidebar-item flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="package" class="h-5 w-5"></i>
+                            <span>Equipment Management</span>
+                        </a>
+                        <a href="#" class="wireframe-sidebar-item flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="trending-up" class="h-5 w-5"></i>
+                            <span>Data Analysis</span>
+                        </a>
+                        <a href="#" class="wireframe-sidebar-item flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="alert-triangle" class="h-5 w-5"></i>
+                            <span>Alert Center</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="px-3 text-xs font-medium mb-2" style="color: var(--text-secondary)">SYSTEM</div>
+                    <div class="space-y-1">
+                        <a href="#" class="wireframe-sidebar-item flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="users" class="h-5 w-5"></i>
+                            <span>User Management</span>
+                        </a>
+                        <a href="#" class="wireframe-sidebar-item flex items-center gap-3 px-3 py-2.5 text-sm">
+                            <i data-lucide="settings" class="h-5 w-5"></i>
+                            <span>System Settings</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- User info -->
+            <div class="p-4 wireframe-border-top">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 wireframe-border flex items-center justify-center">
+                        <i data-lucide="user" class="h-5 w-5" style="color: var(--text-secondary)"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium">Administrator</div>
+                        <div class="text-xs" style="color: var(--text-secondary)">Online</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <header class="wireframe-header px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-semibold">Equipment Data Overview</h1>
+                    <p class="text-sm mt-1" style="color: var(--text-secondary)">Real-time monitoring of all equipment status</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <input type="date" class="wireframe-input" value="2025-12-25">
+                        <span class="text-sm" style="color: var(--text-secondary)">to</span>
+                        <input type="date" class="wireframe-input" value="2025-12-25">
+                    </div>
+                    <button class="wireframe-btn-primary flex items-center gap-2">
+                        <i data-lucide="download" class="h-4 w-4"></i>
+                        Export Report
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content area -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Metric cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="wireframe-card metric-card interactive-element">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary)">Online Equipment</p>
+                                <p class="text-3xl font-semibold mt-2">42</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--success-color)">
+                                    <i data-lucide="trending-up" class="h-4 w-4"></i>
+                                    <span>+5.2%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 wireframe-border flex items-center justify-center">
+                                <i data-lucide="cpu" class="h-6 w-6"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-card metric-card interactive-element">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary)">Today's Production</p>
+                                <p class="text-3xl font-semibold mt-2">8,542</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--success-color)">
+                                    <i data-lucide="trending-up" class="h-4 w-4"></i>
+                                    <span>+12.3%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 wireframe-border flex items-center justify-center">
+                                <i data-lucide="package-2" class="h-6 w-6"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-card metric-card interactive-element">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary)">Equipment Efficiency</p>
+                                <p class="text-3xl font-semibold mt-2">94.7%</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--error-color)">
+                                    <i data-lucide="trending-down" class="h-4 w-4"></i>
+                                    <span>-2.1%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 wireframe-border flex items-center justify-center">
+                                <i data-lucide="gauge" class="h-6 w-6"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="wireframe-card metric-card interactive-element">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary)">Alert Count</p>
+                                <p class="text-3xl font-semibold mt-2">7</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--text-muted)">
+                                    <i data-lucide="minus" class="h-4 w-4"></i>
+                                    <span>Unchanged</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 wireframe-border flex items-center justify-center">
+                                <i data-lucide="alert-circle" class="h-6 w-6"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart area -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Production trend chart -->
+                    <div class="wireframe-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold">Production Trend</h2>
+                            <div class="flex items-center gap-4 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 wireframe-border"></div>
+                                    <span>Actual Production</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 wireframe-border-dashed"></div>
+                                    <span>Planned Production</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="productionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Equipment status pie chart -->
+                    <div class="wireframe-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold">Equipment Status Distribution</h2>
+                            <button class="text-sm hover:underline interactive-element" style="color: var(--text-secondary)">View Details</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment list -->
+                <div class="wireframe-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-semibold">Equipment Real-time Status</h2>
+                        <div class="flex items-center gap-2">
+                            <input type="text" placeholder="Search equipment..." class="wireframe-input w-64">
+                            <button class="wireframe-btn-primary">
+                                <i data-lucide="search" class="h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="wireframe-table">
+                            <thead>
+                                <tr>
+                                    <th class="text-sm font-medium">Equipment ID</th>
+                                    <th class="text-sm font-medium">Equipment Name</th>
+                                    <th class="text-sm font-medium">Status</th>
+                                    <th class="text-sm font-medium">Production</th>
+                                    <th class="text-sm font-medium">Efficiency</th>
+                                    <th class="text-sm font-medium">Last Update</th>
+                                    <th class="text-sm font-medium">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="deviceTableBody">
+                                <!-- Dynamically generated equipment data -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Generate mock data
+        function generateMockData() {
+            const devices = [];
+            for (let i = 1; i <= 10; i++) {
+                const status = Math.random() > 0.2 ? 'online' : (Math.random() > 0.5 ? 'offline' : 'warning');
+                const statusText = status === 'online' ? 'Online' : (status === 'offline' ? 'Offline' : 'Warning');
+                const production = Math.floor(Math.random() * 1000) + 500;
+                const efficiency = (Math.random() * 20 + 80).toFixed(1);
+                
+                devices.push({
+                    id: `DEV${String(i).padStart(3, '0')}`,
+                    name: `Production Equipment-${i}`,
+                    status: status,
+                    statusText: statusText,
+                    production: production,
+                    efficiency: efficiency,
+                    lastUpdate: new Date(Date.now() - Math.random() * 3600000).toLocaleTimeString('en-US')
+                });
+            }
+            return devices;
+        }
+
+        // Render device table
+        function renderDeviceTable() {
+            const tbody = document.getElementById('deviceTableBody');
+            const devices = generateMockData();
+            
+            tbody.innerHTML = devices.map(device => `
+                <tr class="interactive-element">
+                    <td class="text-sm font-mono">${device.id}</td>
+                    <td class="text-sm">${device.name}</td>
+                    <td>
+                        <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium status-${device.status}">
+                            <span class="w-2 h-2 wireframe-border animate-pulse-slow"></span>
+                            ${device.statusText}
+                        </span>
+                    </td>
+                    <td class="text-sm">${device.production.toLocaleString()}</td>
+                    <td class="text-sm">${device.efficiency}%</td>
+                    <td class="text-sm" style="color: var(--text-secondary)">${device.lastUpdate}</td>
+                    <td>
+                        <button class="text-sm hover:underline interactive-element" style="color: var(--text-primary)">View Details</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Initialize production trend chart
+        function initProductionChart() {
+            const ctx = document.getElementById('productionChart').getContext('2d');
+            const hours = [];
+            const actualData = [];
+            const planData = [];
+            
+            for (let i = 0; i < 24; i++) {
+                hours.push(`${i}:00`);
+                actualData.push(Math.floor(Math.random() * 500) + 300);
+                planData.push(450);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: hours,
+                    datasets: [{
+                        label: 'Actual Production',
+                        data: actualData,
+                        borderColor: '#000000',
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        borderDash: []
+                    }, {
+                        label: 'Planned Production',
+                        data: planData,
+                        borderColor: '#666666',
+                        borderDash: [5, 5],
+                        tension: 0.3,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#e0e0e0',
+                                borderDash: [2, 2]
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize equipment status pie chart
+        function initStatusChart() {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Online', 'Offline', 'Maintenance', 'Fault'],
+                    datasets: [{
+                        data: [42, 5, 2, 1],
+                        backgroundColor: [
+                            '#10b981',
+                            '#ef4444',
+                            '#f59e0b',
+                            '#6b7280'
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#000000'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Interactive features
+        function addInteractivity() {
+            // Add click handlers to metric cards
+            document.querySelectorAll('.metric-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // Toggle selection state
+                    this.style.borderColor = this.style.borderColor === 'rgb(102, 102, 102)' ? 'rgb(0, 0, 0)' : 'rgb(102, 102, 102)';
+                });
+            });
+
+            // Add hover effects to table rows
+            document.querySelectorAll('.interactive-element').forEach(element => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.cursor = 'pointer';
+                });
+            });
+
+            // Simulate real-time data updates
+            setInterval(() => {
+                renderDeviceTable();
+                console.log('Data updated');
+            }, 30000);
+        }
+
+        // Initialize after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDeviceTable();
+            initProductionChart();
+            initStatusChart();
+            addInteractivity();
+        });
+    </script>
+</body>
+</html>

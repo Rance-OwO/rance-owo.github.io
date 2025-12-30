@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipment Data Monitoring Platform - Industrial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #374151;
+            --bg-secondary: #1f2937;
+            --bg-card: #1f2937;
+            --text-primary: #d1d5db;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border-color: #4b5563;
+            --input-border: #6b7280;
+            --primary-color: #f59e0b;
+            --primary-hover: #d97706;
+            --terminal-green: #10b981;
+            --status-online: #10b981;
+            --status-offline: #ef4444;
+            --status-warning: #f59e0b;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Courier New', monospace;
+            border-top: 4px solid var(--primary-color);
+        }
+
+        /* Industrial style header */
+        .industrial-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Industrial style cards */
+        .industrial-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 20px;
+            transition: all 0.2s;
+            border-left: 2px solid var(--primary-color);
+        }
+
+        .industrial-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        /* Industrial style buttons */
+        .industrial-btn-primary {
+            background: #4b5563;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 2px;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .industrial-btn-primary:hover {
+            background: var(--primary-color);
+            color: #000;
+        }
+
+        .industrial-btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--text-muted);
+            border-radius: 2px;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .industrial-btn-secondary:hover {
+            border-color: var(--text-secondary);
+            color: var(--text-primary);
+        }
+
+        /* Industrial style inputs */
+        .industrial-input {
+            background: #111827;
+            border: 1px solid var(--input-border);
+            border-radius: 2px;
+            color: var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            padding: 10px 15px;
+            transition: all 0.2s;
+        }
+
+        .industrial-input:focus {
+            outline: none;
+            border-color: var(--terminal-green);
+            box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-item {
+            transition: all 0.2s;
+            border-radius: 2px;
+        }
+
+        .sidebar-item:hover {
+            background: var(--bg-secondary);
+            border-left: 2px solid var(--primary-color);
+        }
+
+        .sidebar-item.active {
+            background: var(--bg-card);
+            color: var(--primary-color);
+            font-weight: bold;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        /* Status indicators */
+        .status-online {
+            color: var(--status-online);
+            background: rgba(16, 185, 129, 0.1);
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-offline {
+            color: var(--status-offline);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-warning {
+            color: var(--status-warning);
+            background: rgba(245, 158, 11, 0.1);
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        /* Table styles */
+        .industrial-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: 'Courier New', monospace;
+        }
+
+        .industrial-table th {
+            background: var(--bg-secondary);
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: left;
+            padding: 12px;
+            border-bottom: 2px solid var(--primary-color);
+            text-transform: uppercase;
+        }
+
+        .industrial-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .industrial-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: #111827;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        /* Terminal style animations */
+        @keyframes terminal-cursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .terminal-cursor::after {
+            content: '_';
+            animation: terminal-cursor 1s infinite;
+            color: var(--terminal-green);
+        }
+
+        /* System log style */
+        .system-log {
+            background: #000;
+            color: var(--terminal-green);
+            font-family: 'Courier New', monospace;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        .log-timestamp {
+            color: var(--text-muted);
+        }
+
+        /* Alert styling */
+        .alert-critical {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--status-offline);
+            color: var(--status-offline);
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--status-warning);
+            color: var(--status-warning);
+        }
+
+        /* Loading animation */
+        @keyframes pulse-industrial {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .pulse-industrial {
+            animation: pulse-industrial 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 flex flex-col">
+            <!-- Logo area -->
+            <div class="flex items-center gap-3 p-6 border-b" style="border-color: var(--border-color)">
+                <div class="flex h-10 w-10 items-center justify-center rounded" style="background: var(--primary-color)">
+                    <i data-lucide="cpu" class="h-5 w-5 text-black"></i>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-lg font-bold">SANKU</span>
+                    <span class="text-xs" style="color: var(--text-secondary)">[MONITOR v2.1]</span>
+                </div>
+            </div>
+
+            <!-- Navigation menu -->
+            <nav class="flex-1 p-4 space-y-6">
+                <div>
+                    <div class="px-3 text-xs font-bold mb-2" style="color: var(--text-secondary); text-transform: uppercase">System Monitoring</div>
+                    <div class="space-y-1">
+                        <a href="#" class="sidebar-item active flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="layout-dashboard" class="h-4 w-4"></i>
+                            <span>SYSTEM_OVERVIEW</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="package" class="h-4 w-4"></i>
+                            <span>EQUIPMENT_CTRL</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="trending-up" class="h-4 w-4"></i>
+                            <span>DATA_ANALYSIS</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="alert-triangle" class="h-4 w-4"></i>
+                            <span>ALERT_CENTER</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="px-3 text-xs font-bold mb-2" style="color: var(--text-secondary); text-transform: uppercase">System Management</div>
+                    <div class="space-y-1">
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="users" class="h-4 w-4"></i>
+                            <span>USER_ADMIN</span>
+                        </a>
+                        <a href="#" class="sidebar-item flex items-center gap-3 px-3 py-2.5 rounded text-sm">
+                            <i data-lucide="settings" class="h-4 w-4"></i>
+                            <span>SYSTEM_CONFIG</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- User info -->
+            <div class="p-4 border-t" style="border-color: var(--border-color)">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 rounded flex items-center justify-center" style="background: var(--primary-color)">
+                        <i data-lucide="user" class="h-5 w-5 text-black"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="text-sm font-bold">ADMINISTRATOR</div>
+                        <div class="status-online">ONLINE</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content area -->
+        <main class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top bar -->
+            <header class="industrial-header px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font decimal-bold">EQUIPMENT_DATA_OVERVIEW</h1>
+                    <p class="text-sm mt-1" style="color: var(--text-secondary)">[REAL-TIME_MONITORING_ACTIVE]</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <input type="date" class="industrial-input" value="2025-12-25">
+                        <span class="text-sm" style="color: var(--text-secondary)">TO</span>
+                        <input type="date" class="industrial-input" value="2025-12-25">
+                    </div>
+                    <button class="industrial-btn-primary flex items-center gap-2">
+                        <i data-lucide="download" class="h-4 w-4"></i>
+                        EXPORT_REPORT
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content area -->
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Metric cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="industrial-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary); text-transform: uppercase;">Online Equipment</p>
+                                <p class="text-3xl font-bold decimal mt-2">42</p>
+                                <p class="text-sm mt-2 flex items-center gap-1 status-online">
+                                    <i data-lucide="trending-up" class="h-3 w-3"></i>
+                                    <span>+5.2%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--primary-color)">
+                                <i data-lucide="cpu" class="h-6 w-6 text-black"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industrial-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary); text-transform: uppercase;">Today's Production</p>
+                                <p class="text-3xl font-bold mt-2">8,542</p>
+                                <p class="text-sm mt-2 flex items-center gap-1 status-online">
+                                    <i data-lucide="trending-up" class="h-3 w-3"></i>
+                                    <span>+12.3%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--primary-color)">
+                                <i data-lucide="package-2" class="h-6 w-6 text-black"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industrial-card">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary); text-transform: uppercase;">Equipment Efficiency</p>
+                                <p class="text-3xl font-bold mt-2">94.7%</p>
+                                <p class="text-sm mt-2 flex items-center gap-1 status-offline">
+                                    <i data-lucide="trending-down" class="h-3 w-3"></i>
+                                    <span>-2.1%</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded flex items-center justify-center" style="background: var(--primary-color)">
+                                <i data-lucide="gauge" class="h-6 w-6 text-black"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industrial-card alert-critical">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-sm" style="color: var(--text-secondary); text-transform: uppercase;">Alert Count</p>
+                                <p class="text-3xl font-bold mt-2">7</p>
+                                <p class="text-sm mt-2 flex items-center gap-1" style="color: var(--text-muted)">
+                                    <i data-lucide="alert-circle" class="h-3 w-3"></i>
+                                    <span>CRITICAL</span>
+                                </p>
+                            </div>
+                            <div class="h-12 w-12 rounded flex items-center justify-center pulse-industrial" style="background: var(--status-offline)">
+                                <i data-lucide="alert-triangle" class="h-6 w-6 text-white"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart area -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Production trend chart -->
+                    <div class="industrial-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold">PRODUCTION_TREND</h2>
+                            <div class="flex items-center gap-4 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 rounded-full" style="background: var(--primary-color)"></div>
+                                    <span>ACTUAL</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="h-2 w-2 rounded-full" style="background: var(--text-muted)"></div>
+                                    <span>PLANNED</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="productionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Equipment status pie chart -->
+                    <div class="industrial-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold">EQUIPMENT_STATUS</h2>
+                            <button class="text-sm hover:underline" style="color: var(--primary-color)">VIEW_DETAILS</button>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System log -->
+                <div class="industrial-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold">SYSTEM_LOG</h2>
+                        <div class="flex items-center gap-2">
+                            <button class="industrial-btn-secondary">
+                                <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                                REFRESH
+                            </button>
+                            <button class="industrial-btn-secondary">
+                                <i data-lucide="download" class="h-4 w-4"></i>
+                                DOWNLOAD
+                            </button>
+                        </div>
+                    </div>
+                    <div class="system-log">
+                        <div class="log-entry">
+                            <span class="log-timestamp">[2025-12-30 08:44:12]</span> SYSTEM_BOOT_COMPLETED_SUCCESSFULLY
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">[2025-12-30 08:44:15]</span> CONNECTING_TO_EQUIPMENT_ARRAY_42_UNITS
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">[2025-12-30 08:44:18]</span> EQUIPMENT_#007_CONNECTION_ESTABLISHED
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">[2025-12-30 08:44:21]</span> WARNING: EQUIPMENT_#023_TEMPERATURE_ABOVE_THRESHOLD
+                        </div>
+                        <div class="log-entry">
+                            <span class="log-timestamp">[2025-12-30 08:44:24]</span> PRODUCTION_DATA_SYNC_IN_PROGRESS...<span class="terminal-cursor"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Equipment list -->
+                <div class="industrial-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="text-lg font-bold">EQUIPMENT_STATUS_MATRIX</h2>
+                        <div class="flex items-center gap-2">
+                            <input type="text" placeholder="SEARCH_EQUIPMENT..." class="industrial-input w-64">
+                            <button class="industrial-btn-primary">
+                                <i data-lucide="search" class="h-4 w-4"></i>
+                                SEARCH
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="industrial-table">
+                            <thead>
+                                <tr>
+                                    <th>EQUIPMENT_ID</th>
+                                    <th>NAME</th>
+                                    <th>STATUS</th>
+                                    <th>EFFICIENCY</th>
+                                    <th>PRODUCTION</th>
+                                    <th>LAST_UPDATE</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#001</td>
+                                    <td>ASSEMBLY_LINE_A</td>
+                                    <td><span class="status-online">ONLINE</span></td>
+                                    <td>98.5%</td>
+                                    <td>1,247</td>
+                                    <td>08:44:12</td>
+                                    <td>
+                                        <button class="industrial-btn-secondary text-xs">DETAILS</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#002</td>
+                                    <td>PACKAGING_UNIT_B</td>
+                                    <td><span class="status-online">ONLINE</span></td>
+                                    <td>96.2%</td>
+                                    <td>987</td>
+                                    <td>08:44:15</td>
+                                    <td>
+                                        <button class="industrial-btn-secondary text-xs">DETAILS</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#003</td>
+                                    <td>QUALITY_CONTROL_C</td>
+                                    <td><span class="status-warning">WARNING</span></td>
+                                    <td>87.3%</td>
+                                    <td>756</td>
+                                    <td>08:44:18</td>
+                                    <td>
+                                        <button class="industrial-btn-secondary text-xs">DETAILS</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#004</td>
+                                    <td>WELDING_STATION_D</td>
+                                    <td><span class="status-offline">OFFLINE</span></td>
+                                    <td>0.0%</td>
+                                    <td>0</td>
+                                    <td>08:42:33</td>
+                                    <td>
+                                        <button class="industrial-btn-primary text-xs">RESTART</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#005</td>
+                                    <td>PAINT_BOOTH_E</td>
+                                    <td><span class="status-online">ONLINE</span></td>
+                                    <td>94.7%</td>
+                                    <td>1,102</td>
+                                    <td>08:44:21</td>
+                                    <td>
+                                        <button class="industrial-btn-secondary text-xs">DETAILS</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Production trend chart
+        const productionCtx = document.getElementById('productionChart').getContext('2d');
+        new Chart(productionCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                datasets: [{
+                    label: 'Actual Production',
+                    data: [650, 720, 890, 1240, 1180, 920, 8542],
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Planned Production',
+                    data: [700, 750, 850, 1200, 1150, 950, 8000],
+                    borderColor: '#6b7280',
+                    backgroundColor: 'rgba(107, 85, 99, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db',
+                            font: {
+                                family: 'Courier New'
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: '#4b5563' }
+                    },
+                    y: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: '#4b5563' }
+                    }
+                }
+            }
+        });
+
+        // Equipment status pie chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Online', 'Warning', 'Offline', 'Maintenance'],
+                datasets: [{
+                    data: [38, 3, 1, 0],
+                    backgroundColor: ['#10b981', '#f59e0b', '#ef4444', '#6b7280'],
+                    borderColor: '#1f2937',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#d1d5db',
+                            font: {
+                                family: 'Courier New'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Simulate real-time log updates
+        setInterval(() => {
+            const logContainer = document.querySelector('.system-log');
+            const timestamp = new Date().toLocaleString('en-US', { 
+                year: 'numeric', 
+                month: '2-digit', 
+                day: '2-digit', 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit',
+                hour12: false 
+            }).replace(',', '');
+            
+            const messages = [
+                'DATA_SYNC_COMPLETED',
+                'EQUIPMENT_DIAGNOSTICS_OK',
+                'TEMPERATURE_STABILIZED',
+                'PRODUCTION_TARGET_ACHIEVED',
+                'SYSTEM_PERFORMANCE_OPTIMAL'
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            const newLogEntry = document.createElement('div');
+            newLogEntry.className = 'log-entry';
+            newLogEntry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span> ${randomMessage}`;
+            
+            logContainer.appendChild(newLogEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Keep only last 10 entries
+            while (logContainer.children.length > 10) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }, 5000);
+
+        // Interactive button handlers
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.textContent.includes('RESTART')) {
+                    const row = this.closest('tr');
+                    const statusCell = row.querySelector('td:nth-child(3)');
+                    statusCell.innerHTML = '<span class="status-warning">RESTARTING</span>';
+                    
+                    setTimeout(() => {
+                        statusCell.innerHTML = '<span class="status-online">ONLINE</span>';
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
